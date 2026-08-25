@@ -30,6 +30,7 @@ import { NoaaVisibilityProvider } from "@/lib/providers/noaaVisibility";
 import { shopsNear, googleMapsSearchUrl } from "@/lib/shops";
 import { getShopRatingSummaries } from "@/lib/shopRatings";
 import { NearbyShops, type NearbyShopView } from "@/components/NearbyShops";
+import { TechnicalDetails } from "@/components/TechnicalDetails";
 
 const VALID_ACTIVITIES = new Set(ACTIVITIES.map((a) => a.id));
 const VALID_LEVELS = new Set<SkillLevel>(["principiante", "intermedio", "avanzado"]);
@@ -270,6 +271,10 @@ export default async function ResultadoPage({
           />
         </div>
       )}
+
+      <div className="mt-6">
+        <TechnicalDetails snapshot={headline.snapshot} />
+      </div>
 
       <div className="mt-6">
         <FeedbackWidget
