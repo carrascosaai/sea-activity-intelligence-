@@ -1,9 +1,15 @@
 import type { ConditionSnapshot } from "@/lib/types";
 import { AirTempIcon, PeriodIcon, RainIcon, WaterTempIcon, WaveIcon, WindIcon } from "@/components/ui/WeatherIcons";
+import { namedWind } from "@/lib/weatherFormat";
 
 export function ConditionsGrid({ snapshot }: { snapshot: ConditionSnapshot }) {
+  const wind = namedWind(snapshot.windDirectionDeg);
   const items = [
-    { Icon: WindIcon, label: "Viento", value: `${Math.round(snapshot.windSpeedKmh)} km/h` },
+    {
+      Icon: WindIcon,
+      label: "Viento",
+      value: `${Math.round(snapshot.windSpeedKmh)} km/h${wind ? ` · ${wind}` : ""}`,
+    },
     { Icon: WaveIcon, label: "Oleaje", value: `${snapshot.waveHeightM.toFixed(1)} m` },
     { Icon: PeriodIcon, label: "Periodo", value: `${Math.round(snapshot.wavePeriodS)} s` },
     { Icon: WaterTempIcon, label: "Agua", value: `${Math.round(snapshot.waterTempC)} ºC` },

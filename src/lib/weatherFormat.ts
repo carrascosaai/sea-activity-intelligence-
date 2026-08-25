@@ -10,6 +10,18 @@ export function compassDirection(deg: number | null): string | null {
   return COMPASS_POINTS[idx];
 }
 
+// Rosa de los vientos clásica de 8 direcciones usada en España (sobre todo
+// Mediterráneo/Estrecho): Levante = viento del Este, Poniente = del Oeste,
+// etc. Es terminología real y estandarizada, no una etiqueta inventada.
+const NAMED_WINDS = ["Tramontana", "Gregal", "Levante", "Xaloc", "Mediodía", "Lebeche", "Poniente", "Mistral"];
+
+/** Grados (0-360) al nombre tradicional del viento, p. ej. 90º -> "Levante". */
+export function namedWind(deg: number | null): string | null {
+  if (deg == null) return null;
+  const idx = Math.round((((deg % 360) + 360) % 360) / 45) % 8;
+  return NAMED_WINDS[idx];
+}
+
 // Códigos WMO de tiempo (estándar usado por Open-Meteo) -> descripción en
 // español. https://open-meteo.com/en/docs (sección "WMO Weather interpretation codes")
 const WEATHER_CODE_LABELS: Record<number, string> = {

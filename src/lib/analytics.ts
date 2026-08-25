@@ -15,7 +15,10 @@ export type AnalyticsEvent =
   // Tiendas cerca de la playa (ver lib/shops.ts) — uso real del enlace a
   // Google Maps y de las valoraciones propias de la comunidad.
   | "shop_maps_clicked"
-  | "shop_rated";
+  | "shop_rated"
+  // Reportes reales de la comunidad (ver lib/communityReports.ts) — el
+  // sustituto honesto de "opiniones de internet" que sí podemos ofrecer.
+  | "community_report_posted";
 
 const SESSION_KEY = "sai_session_id";
 

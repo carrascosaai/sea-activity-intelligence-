@@ -1,5 +1,5 @@
 import type { ConditionSnapshot } from "@/lib/types";
-import { compassDirection, weatherCodeLabel } from "@/lib/weatherFormat";
+import { compassDirection, namedWind, weatherCodeLabel } from "@/lib/weatherFormat";
 
 function Row({ label, value }: { label: string; value: string }) {
   return (
@@ -21,6 +21,7 @@ function Row({ label, value }: { label: string; value: string }) {
 export function TechnicalDetails({ snapshot }: { snapshot: ConditionSnapshot }) {
   const windDir = compassDirection(snapshot.windDirectionDeg);
   const waveDir = compassDirection(snapshot.waveDirectionDeg);
+  const windName = namedWind(snapshot.windDirectionDeg);
 
   return (
     <div className="rounded-2xl bg-surface border border-border p-4">
@@ -33,7 +34,7 @@ export function TechnicalDetails({ snapshot }: { snapshot: ConditionSnapshot }) 
       <div>
         <Row
           label="Viento"
-          value={`${Math.round(snapshot.windSpeedKmh)} km/h${windDir ? ` · ${windDir} (${Math.round(snapshot.windDirectionDeg!)}º)` : ""}`}
+          value={`${Math.round(snapshot.windSpeedKmh)} km/h${windDir ? ` · ${windDir} (${Math.round(snapshot.windDirectionDeg!)}º)` : ""}${windName ? ` · ${windName}` : ""}`}
         />
         <Row
           label="Oleaje"

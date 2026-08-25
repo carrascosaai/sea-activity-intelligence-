@@ -160,6 +160,24 @@ create table if not exists shop_ratings (
 );
 create index if not exists idx_shop_ratings_slug on shop_ratings (shop_slug);
 
+-- Reportes reales de la comunidad ("hoy había resaca aunque el score decía
+-- bueno", "aquí se pesca bien con levante"...). Sustituto honesto de
+-- "opiniones de internet": no se puede rastrear en bloque TripAdvisor/Google
+-- (viola sus condiciones de uso y no hay forma fiable de que una IA decida
+-- qué opinión corrige qué dato), así que en vez de eso dejamos que la propia
+-- comunidad de la web escriba notas reales, visibles para todos, que se van
+-- acumulando con tráfico real — mismo patrón que shop_ratings/feedback.
+-- Contenido público sin moderar más allá del límite de longitud y el
+-- límite de peticiones (ver lib/rateLimit.ts).
+create table if not exists community_reports (
+  id uuid primary key default gen_random_uuid(),
+  location_slug text not null references locations(slug),
+  activity_id text references activities(id), -- null = nota general, no ligada a un deporte
+  body text not null check (char_length(body) between 3 and 280),
+  created_at timestamptz not null default now()
+);
+create index if not exists idx_community_reports_location on community_reports (location_slug, created_at desc);
+
 create index if not exists idx_weather_forecasts_location_time on weather_forecasts (location_slug, forecast_time);
 create index if not exists idx_marine_forecasts_location_time on marine_forecasts (location_slug, forecast_time);
 create index if not exists idx_recommendations_location_activity on recommendations (location_slug, activity_id, forecast_time);

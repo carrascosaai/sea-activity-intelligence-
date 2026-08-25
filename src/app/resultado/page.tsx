@@ -31,6 +31,12 @@ import { shopsNear, googleMapsSearchUrl } from "@/lib/shops";
 import { getShopRatingSummaries } from "@/lib/shopRatings";
 import { NearbyShops, type NearbyShopView } from "@/components/NearbyShops";
 import { TechnicalDetails } from "@/components/TechnicalDetails";
+import { seaBasinForLocation } from "@/lib/seaBasin";
+import { FISHING_INFO } from "@/lib/fishing";
+import { piersNear } from "@/lib/piers";
+import { FishingInfoCard } from "@/components/FishingInfoCard";
+import { getCommunityReports } from "@/lib/communityReports";
+import { CommunityReports, type CommunityReportView } from "@/components/CommunityReports";
 
 const VALID_ACTIVITIES = new Set(ACTIVITIES.map((a) => a.id));
 const VALID_LEVELS = new Set<SkillLevel>(["principiante", "intermedio", "avanzado"]);
@@ -100,14 +106,21 @@ export default async function ResultadoPage({
   const showShops = !NO_RENTAL_ACTIVITIES.has(activityId);
   const nearbyShopsRaw = showShops ? shopsNear(location.lat, location.lon, { activityId, radiusKm: 15, limit: 5 }) : [];
 
+  const showFishing = activityId === "pesca";
+  const seaBasin = showFishing ? seaBasinForLocation(location) : null;
+  const fishingInfo = seaBasin ? FISHING_INFO[seaBasin] : null;
+  const nearbyPiers = showFishing ? piersNear(location.lat, location.lon, { radiusKm: 12, limit: 5 }) : [];
+
   let snapshots;
   let visibility: VisibilityInfo | null;
   let shopRatings: Record<string, { avg: number; count: number }>;
+  let communityReports: CommunityReportView[];
   try {
-    [snapshots, visibility, shopRatings] = await Promise.all([
+    [snapshots, visibility, shopRatings, communityReports] = await Promise.all([
       getDailySnapshots(location, dateISO),
       visibilityPromise,
       getShopRatingSummaries(nearbyShopsRaw.map((s) => s.slug)),
+      getCommunityReports(location.slug),
     ]);
   } catch (err) {
     console.error("[resultado] fallo al obtener datos", err);
@@ -255,6 +268,12 @@ export default async function ResultadoPage({
         </div>
       )}
 
+      {showFishing && (
+        <div className="mt-6">
+          <FishingInfoCard info={fishingInfo} piers={nearbyPiers} />
+        </div>
+      )}
+
       <div className="mt-6">
         <HourlyComparison hourly={hourly} highlightTime={headline.time} />
       </div>
@@ -271,6 +290,10 @@ export default async function ResultadoPage({
           />
         </div>
       )}
+
+      <div className="mt-6">
+        <CommunityReports locationSlug={location.slug} activityId={activityId} initialReports={communityReports} />
+      </div>
 
       <div className="mt-6">
         <TechnicalDetails snapshot={headline.snapshot} />
