@@ -145,6 +145,21 @@ create table if not exists forecast_cache (
 );
 create index if not exists idx_forecast_cache_location_date on forecast_cache (location_slug, date_iso);
 
+-- Valoraciones de la propia comunidad para las tiendas/centros de deportes
+-- acuáticos (dataset real de OSM, ver scripts/generate-shops.mjs y
+-- lib/shops.ts). Distinto de `businesses`/`booking_links` (P1, negocios
+-- afiliados dados de alta a mano): esto es cualquier tienda real detectada
+-- automáticamente, puntuable por cualquier usuario. No inventamos estrellas
+-- de Google — este es el mecanismo honesto de "estrellas propias" que se va
+-- llenando con tráfico real (mismo patrón que analytics_events/feedback).
+create table if not exists shop_ratings (
+  id uuid primary key default gen_random_uuid(),
+  shop_slug text not null,
+  rating smallint not null check (rating between 1 and 5),
+  created_at timestamptz not null default now()
+);
+create index if not exists idx_shop_ratings_slug on shop_ratings (shop_slug);
+
 create index if not exists idx_weather_forecasts_location_time on weather_forecasts (location_slug, forecast_time);
 create index if not exists idx_marine_forecasts_location_time on marine_forecasts (location_slug, forecast_time);
 create index if not exists idx_recommendations_location_activity on recommendations (location_slug, activity_id, forecast_time);

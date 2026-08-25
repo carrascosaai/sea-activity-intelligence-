@@ -27,10 +27,17 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { WaterClarityCard } from "@/components/WaterClarityCard";
 import { FeedbackWidget } from "@/components/FeedbackWidget";
 import { NoaaVisibilityProvider } from "@/lib/providers/noaaVisibility";
+import { shopsNear, googleMapsSearchUrl } from "@/lib/shops";
+import { getShopRatingSummaries } from "@/lib/shopRatings";
+import { NearbyShops, type NearbyShopView } from "@/components/NearbyShops";
 
 const VALID_ACTIVITIES = new Set(ACTIVITIES.map((a) => a.id));
 const VALID_LEVELS = new Set<SkillLevel>(["principiante", "intermedio", "avanzado"]);
 const UNDERWATER_ACTIVITIES = new Set<ActivityId>(["buceo", "snorkel", "apnea"]);
+// Actividades sin equipo que tenga sentido alquilar (bañarse, nadar, pescar,
+// coasteering) — para esas no mostramos la sección de tiendas, ver
+// lib/shops.ts / scripts/generate-shops.mjs para qué actividades sí cubrimos.
+const NO_RENTAL_ACTIVITIES = new Set<ActivityId>(["bano", "pesca", "coasteering", "natacion-aguas-abiertas"]);
 const visibilityProvider = new NoaaVisibilityProvider();
 
 function resolveDate(when: WhenMode, dateParam?: string): string {
@@ -89,11 +96,20 @@ export default async function ResultadoPage({
     ? visibilityProvider.getInfo(location.lat, location.lon).catch(() => null)
     : Promise.resolve(null);
 
+  const showShops = !NO_RENTAL_ACTIVITIES.has(activityId);
+  const nearbyShopsRaw = showShops ? shopsNear(location.lat, location.lon, { activityId, radiusKm: 15, limit: 5 }) : [];
+
   let snapshots;
   let visibility: VisibilityInfo | null;
+  let shopRatings: Record<string, { avg: number; count: number }>;
   try {
-    [snapshots, visibility] = await Promise.all([getDailySnapshots(location, dateISO), visibilityPromise]);
-  } catch {
+    [snapshots, visibility, shopRatings] = await Promise.all([
+      getDailySnapshots(location, dateISO),
+      visibilityPromise,
+      getShopRatingSummaries(nearbyShopsRaw.map((s) => s.slug)),
+    ]);
+  } catch (err) {
+    console.error("[resultado] fallo al obtener datos", err);
     return (
       <EmptyState
         icon="📡"
@@ -116,6 +132,18 @@ export default async function ResultadoPage({
       />
     );
   }
+
+  const nearbyShops: NearbyShopView[] = nearbyShopsRaw.map((s) => ({
+    slug: s.slug,
+    name: s.name,
+    distanceKm: Math.round(s.distanceKm * 10) / 10,
+    phone: s.phone,
+    website: s.website,
+    openingHours: s.openingHours,
+    mapsUrl: googleMapsSearchUrl(s),
+    ratingAvg: shopRatings[s.slug]?.avg ?? null,
+    ratingCount: shopRatings[s.slug]?.count ?? 0,
+  }));
 
   const hourly = buildHourlyScores(snapshots, activityId, level);
   const bestWindow = computeBestWindow(hourly);
@@ -217,6 +245,12 @@ export default async function ResultadoPage({
             {formatHourLabel(bestWindow.startTime)} — {formatHourLabel(bestWindow.endTime)}
           </p>
           <p className="text-sm text-accent font-medium">{bestWindow.avgScore}/100</p>
+        </div>
+      )}
+
+      {showShops && (
+        <div className="mt-6">
+          <NearbyShops shops={nearbyShops} activityName={activity.name} />
         </div>
       )}
 

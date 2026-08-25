@@ -11,7 +11,11 @@ export type AnalyticsEvent =
   | "favorite_created"
   // No estaba en el brief original: se añadió para poder validar (o corregir)
   // los umbrales de scoring con datos de uso real — ver VALIDATION.md.
-  | "recommendation_feedback";
+  | "recommendation_feedback"
+  // Tiendas cerca de la playa (ver lib/shops.ts) — uso real del enlace a
+  // Google Maps y de las valoraciones propias de la comunidad.
+  | "shop_maps_clicked"
+  | "shop_rated";
 
 const SESSION_KEY = "sai_session_id";
 
