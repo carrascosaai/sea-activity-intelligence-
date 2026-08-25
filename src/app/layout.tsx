@@ -6,10 +6,13 @@ import "./globals.css";
 const SITE_DESCRIPTION =
   "Convierte el viento, el oleaje y el tiempo en una decisión clara: qué actividad acuática hacer, dónde y cuándo. 20 deportes, toda la costa de España.";
 
-// Se resuelve solo al dominio real del despliegue (Vercel expone VERCEL_URL
-// automáticamente) — así la imagen de vista previa social nunca queda
-// apuntando a localhost, sin tener que tocar esto al desplegar.
-const siteUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000";
+// VERCEL_PROJECT_PRODUCTION_URL es el dominio estable de producción (no cambia
+// entre despliegues, a diferencia de VERCEL_URL que apunta al deploy concreto
+// con hash aleatorio) — así la imagen de vista previa social y el sitemap
+// nunca quedan apuntando a una URL de un deploy viejo o a localhost.
+const siteUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  : "http://localhost:3000";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
