@@ -1,0 +1,139 @@
+@import "tailwindcss";
+
+:root {
+  --background: #070f19;
+  --surface: #0f1c2c;
+  --surface-2: #17293f;
+  --foreground: #eaf3fa;
+  --muted: #85a0b6;
+  --border: #1f3349;
+  --accent: #21d6b8;
+  --accent-2: #2f9de0;
+  --score-green: #2fd06a;
+  --score-amber: #f3ad3d;
+  --score-orange: #f2884a;
+  --score-red: #f2564a;
+  /* Pila de fuentes nativas del sistema — nunca depende de una red externa
+     (Google Fonts) que pueda fallar o estar bloqueada en el entorno de
+     despliegue. Cada SO usa su propia tipografía del sistema, ya optimizada
+     para pantalla: San Francisco (Apple), Segoe UI (Windows), Roboto (Android). */
+  --font-system:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
+  --color-score-green: var(--score-green);
+  --color-score-amber: var(--score-amber);
+  --color-score-orange: var(--score-orange);
+  --color-score-red: var(--score-red);
+  --font-sans: var(--font-system);
+}
+
+body {
+  background: radial-gradient(circle at 15% 0%, #0d2236 0%, var(--background) 55%);
+  color: var(--foreground);
+  font-family: var(--font-system);
+  min-height: 100svh;
+}
+
+::selection {
+  background: var(--accent);
+  color: #04231d;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+* {
+  scrollbar-color: var(--border) transparent;
+  scrollbar-width: thin;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.7);
+  cursor: pointer;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.35s ease-out both;
+}
+
+/* Foco visible consistente para navegación por teclado, en toda la app. */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Mapa: oscurece las teselas de OpenStreetMap para que encajen con el tema
+   oscuro de la app (truco de inversión de brillo, conserva el color relativo). */
+.map-tiles-dark {
+  filter: brightness(0.62) contrast(1.05) saturate(0.65) invert(1) hue-rotate(180deg);
+}
+
+/* Popups de Leaflet con el tema oscuro de la app en vez del blanco por defecto. */
+.sai-popup .leaflet-popup-content-wrapper {
+  background: var(--surface);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+}
+.sai-popup .leaflet-popup-content {
+  margin: 10px 12px;
+}
+.sai-popup .leaflet-popup-tip {
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+.sai-popup .leaflet-popup-close-button {
+  color: var(--muted) !important;
+}
+.sai-popup .leaflet-popup-close-button:hover {
+  color: var(--foreground) !important;
+}
+
+.leaflet-control-zoom a {
+  background: var(--surface) !important;
+  color: var(--foreground) !important;
+  border-color: var(--border) !important;
+}
+.leaflet-control-zoom a:hover {
+  background: var(--surface-2) !important;
+}
+.leaflet-control-attribution {
+  background: rgba(15, 28, 44, 0.75) !important;
+  color: var(--muted) !important;
+}
+.leaflet-control-attribution a {
+  color: var(--muted) !important;
+}

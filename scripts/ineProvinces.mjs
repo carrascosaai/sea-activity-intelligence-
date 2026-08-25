@@ -1,0 +1,63 @@
+// Códigos oficiales de provincia del INE (2 primeros dígitos de ref:ine) ->
+// nombre de provincia + comunidad autónoma. Esto es dato administrativo
+// oficial, no una heurística — se usa para asignar la provincia real a cada
+// municipio de scripts/tmp/places_raw.json a partir de su tag `ref:ine`.
+export const INE_PROVINCES = {
+  "01": { name: "Álava", region: "País Vasco" },
+  "02": { name: "Albacete", region: "Castilla-La Mancha" },
+  "03": { name: "Alicante", region: "Comunidad Valenciana" },
+  "04": { name: "Almería", region: "Andalucía" },
+  "05": { name: "Ávila", region: "Castilla y León" },
+  "06": { name: "Badajoz", region: "Extremadura" },
+  "07": { name: "Illes Balears", region: "Islas Baleares" },
+  "08": { name: "Barcelona", region: "Cataluña" },
+  "09": { name: "Burgos", region: "Castilla y León" },
+  "10": { name: "Cáceres", region: "Extremadura" },
+  "11": { name: "Cádiz", region: "Andalucía" },
+  "12": { name: "Castellón", region: "Comunidad Valenciana" },
+  "13": { name: "Ciudad Real", region: "Castilla-La Mancha" },
+  "14": { name: "Córdoba", region: "Andalucía" },
+  "15": { name: "A Coruña", region: "Galicia" },
+  "16": { name: "Cuenca", region: "Castilla-La Mancha" },
+  "17": { name: "Girona", region: "Cataluña" },
+  "18": { name: "Granada", region: "Andalucía" },
+  "19": { name: "Guadalajara", region: "Castilla-La Mancha" },
+  "20": { name: "Gipuzkoa", region: "País Vasco" },
+  "21": { name: "Huelva", region: "Andalucía" },
+  "22": { name: "Huesca", region: "Aragón" },
+  "23": { name: "Jaén", region: "Andalucía" },
+  "24": { name: "León", region: "Castilla y León" },
+  "25": { name: "Lleida", region: "Cataluña" },
+  "26": { name: "La Rioja", region: "La Rioja" },
+  "27": { name: "Lugo", region: "Galicia" },
+  "28": { name: "Madrid", region: "Comunidad de Madrid" },
+  "29": { name: "Málaga", region: "Andalucía" },
+  "30": { name: "Murcia", region: "Región de Murcia" },
+  "31": { name: "Navarra", region: "Comunidad Foral de Navarra" },
+  "32": { name: "Ourense", region: "Galicia" },
+  "33": { name: "Asturias", region: "Asturias" },
+  "34": { name: "Palencia", region: "Castilla y León" },
+  "35": { name: "Las Palmas", region: "Canarias" },
+  "36": { name: "Pontevedra", region: "Galicia" },
+  "37": { name: "Salamanca", region: "Castilla y León" },
+  "38": { name: "Santa Cruz de Tenerife", region: "Canarias" },
+  "39": { name: "Cantabria", region: "Cantabria" },
+  "40": { name: "Segovia", region: "Castilla y León" },
+  "41": { name: "Sevilla", region: "Andalucía" },
+  "42": { name: "Soria", region: "Castilla y León" },
+  "43": { name: "Tarragona", region: "Cataluña" },
+  "44": { name: "Teruel", region: "Aragón" },
+  "45": { name: "Toledo", region: "Castilla-La Mancha" },
+  "46": { name: "Valencia", region: "Comunidad Valenciana" },
+  "47": { name: "Valladolid", region: "Castilla y León" },
+  "48": { name: "Bizkaia", region: "País Vasco" },
+  "49": { name: "Zamora", region: "Castilla y León" },
+  "50": { name: "Zaragoza", region: "Aragón" },
+  "51": { name: "Ceuta", region: "Ceuta" },
+  "52": { name: "Melilla", region: "Melilla" },
+};
+
+export function provinceFromIne(refIne) {
+  if (!refIne || refIne.length < 2) return null;
+  return INE_PROVINCES[refIne.slice(0, 2)] ?? null;
+}
