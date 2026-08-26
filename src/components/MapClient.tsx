@@ -9,7 +9,10 @@ import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import Link from "next/link";
 import { BAND_HEX, BAND_META } from "@/lib/bandLabels";
+import { MapLegend } from "@/components/MapLegend";
 import type { ActivityId, ScoreBand, SkillLevel } from "@/lib/types";
+
+const GOOD_BANDS = new Set<ScoreBand>(["ideal", "buena"]);
 
 function makeScoredIcon(band: ScoreBand) {
   return L.divIcon({
@@ -91,6 +94,7 @@ export function MapClient({
     Object.fromEntries(initialPoints.map((p) => [p.slug, p]))
   );
   const [loading, setLoading] = useState(false);
+  const [onlyGood, setOnlyGood] = useState(false);
   const requestIdRef = useRef(0);
 
   useEffect(() => {
@@ -131,11 +135,23 @@ export function MapClient({
 
   return (
     <div className="absolute inset-0">
+      <button
+        type="button"
+        onClick={() => setOnlyGood((v) => !v)}
+        className={`absolute top-3 left-3 z-[1000] rounded-full border px-3 py-1.5 text-xs font-medium shadow-lg cursor-pointer transition-colors ${
+          onlyGood
+            ? "bg-score-green/20 border-score-green/50 text-score-green"
+            : "bg-surface border-border text-muted hover:text-foreground"
+        }`}
+      >
+        {onlyGood ? "✓ Solo buenas condiciones" : "Solo buenas condiciones"}
+      </button>
       {loading && (
         <div className="absolute top-3 right-3 z-[1000] rounded-full bg-surface border border-border px-3 py-1.5 text-xs text-muted shadow-lg">
           Calculando condiciones...
         </div>
       )}
+      <MapLegend />
       <MapContainer
         center={[40.2, -3.7]}
         zoom={6}
@@ -151,6 +167,7 @@ export function MapClient({
         <MarkerClusterGroup chunkedLoading spiderfyOnMaxZoom disableClusteringAtZoom={15} maxClusterRadius={50}>
           {allPoints.map((loc) => {
             const scored = scoredBySlug[loc.slug];
+            if (onlyGood && scored && !GOOD_BANDS.has(scored.band)) return null;
             return (
               <Marker
                 key={loc.slug}

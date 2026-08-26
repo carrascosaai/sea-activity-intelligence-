@@ -122,7 +122,7 @@ export default function Home() {
               </button>
             </div>
             <LocationSearch onSelect={selectLocation} selectedSlug={location?.slug} />
-            <Link href="/mapa" className="block text-center text-xs text-accent mt-3 hover:underline">
+            <Link href={`/mapa?activity=${activity}`} className="block text-center text-xs text-accent mt-3 hover:underline">
               Ver todas en el mapa →
             </Link>
           </div>
