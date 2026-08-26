@@ -21,17 +21,15 @@ export function FishingInfoCard({
             Conocimiento general de la costa {info.basinLabel.toLowerCase()}, no una medición de esta playa exacta.
           </p>
 
-          <p className="text-xs uppercase tracking-wide text-muted mb-1">Especies habituales</p>
-          <div className="flex flex-wrap gap-1.5 mb-3">
-            {info.species.map((s) => (
-              <span key={s} className="rounded-full bg-surface-2 border border-border/70 px-2.5 py-1 text-xs">
-                {s}
-              </span>
+          <p className="text-xs uppercase tracking-wide text-muted mb-1.5">Especies habituales y su cebo</p>
+          <ul className="flex flex-col gap-1 mb-3">
+            {info.speciesBait.map((sb) => (
+              <li key={sb.species} className="flex items-baseline justify-between gap-3 text-sm py-1 border-b border-border/40 last:border-0">
+                <span className="font-medium shrink-0">{sb.species}</span>
+                <span className="text-muted text-right">{sb.bait}</span>
+              </li>
             ))}
-          </div>
-
-          <p className="text-xs uppercase tracking-wide text-muted mb-1">Cebo</p>
-          <p className="text-sm mb-3">{info.baitTip}</p>
+          </ul>
 
           <p className="text-xs uppercase tracking-wide text-muted mb-1">Según las condiciones</p>
           <ul className="flex flex-col gap-1 mb-1">
@@ -50,20 +48,29 @@ export function FishingInfoCard({
       <div className="mt-3 pt-3 border-t border-border/60">
         <p className="text-xs uppercase tracking-wide text-muted mb-1.5">Espigones cerca</p>
         {piers.length > 0 ? (
-          <ul className="flex flex-col gap-1.5">
-            {piers.map((p) => (
-              <li key={p.slug} className="flex items-center justify-between text-sm">
-                <span>
-                  {p.kind === "groyne" ? "🪨" : "🧱"} {p.name}
-                </span>
-                <span className="text-xs text-muted shrink-0 ml-2">
-                  {p.distanceKm < 1 ? `${Math.round(p.distanceKm * 1000)} m` : `${p.distanceKm.toFixed(1)} km`}
-                </span>
-              </li>
-            ))}
-          </ul>
+          <>
+            <ul className="flex flex-col gap-1.5">
+              {piers.map((p) => (
+                <li key={p.slug} className="flex items-center justify-between text-sm">
+                  <span>
+                    {p.kind === "groyne" ? "🪨" : "🧱"} {p.name}
+                  </span>
+                  <span className="text-xs text-muted shrink-0 ml-2">
+                    {p.distanceKm < 1 ? `${Math.round(p.distanceKm * 1000)} m` : `${p.distanceKm.toFixed(1)} km`}
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <p className="text-[11px] text-muted mt-2">
+              Tener un espigón/dique cerca suele ser una buena señal para pescar desde tierra — no es una garantía,
+              pero es un dato real (estructura verificable), no una puntuación inventada.
+            </p>
+          </>
         ) : (
-          <p className="text-sm text-muted">No encontramos espigones o diques registrados cerca, en OpenStreetMap.</p>
+          <p className="text-sm text-muted">
+            No encontramos espigones o diques registrados cerca, en OpenStreetMap. Eso no significa que no se pueda
+            pescar aquí, solo que no hay esa estructura concreta cerca.
+          </p>
         )}
       </div>
     </div>
