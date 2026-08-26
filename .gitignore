@@ -43,3 +43,6 @@ scripts/tmp/
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# APK y clave de firma de Android (la clave nunca debe subirse a un repo público)
+/android-release/
