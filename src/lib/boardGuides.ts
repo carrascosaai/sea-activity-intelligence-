@@ -1,6 +1,6 @@
 import type { ActivityId, SkillLevel } from "./types";
 
-export type BoardShape = "shortboard" | "sup" | "twintip" | "wakeboard";
+export type BoardShape = "shortboard" | "sup" | "bodyboard" | "twintip" | "windsurf" | "wingfoil" | "wakeboard";
 
 export interface BoardSpec {
   level: SkillLevel;
@@ -79,7 +79,7 @@ export const BOARD_GUIDES: Partial<Record<ActivityId, BoardGuide>> = {
     ],
   },
   bodyboard: {
-    shape: "shortboard",
+    shape: "bodyboard",
     searchQuery: "bodyboard",
     specs: [
       { level: "principiante", type: "Core de PE, tabla grande", sizeLabel: "42\" – 44\"", volumeLabel: "—", note: "Más flotabilidad y perdón, ideal para coger las primeras olas." },
@@ -97,7 +97,7 @@ export const BOARD_GUIDES: Partial<Record<ActivityId, BoardGuide>> = {
     ],
   },
   windsurf: {
-    shape: "sup",
+    shape: "windsurf",
     searchQuery: "tabla de windsurf",
     specs: [
       { level: "principiante", type: "Muy ancha y estable", sizeLabel: "—", volumeLabel: "150+ L", note: "Prioriza flotabilidad total sobre velocidad, para aprender equilibrio." },
@@ -106,7 +106,7 @@ export const BOARD_GUIDES: Partial<Record<ActivityId, BoardGuide>> = {
     ],
   },
   wingfoil: {
-    shape: "sup",
+    shape: "wingfoil",
     searchQuery: "tabla de wingfoil",
     specs: [
       { level: "principiante", type: "Muy voluminosa + foil grande", sizeLabel: "—", volumeLabel: "100 – 150 L", note: "Facilita despegar y mantener el equilibrio sobre el foil." },
