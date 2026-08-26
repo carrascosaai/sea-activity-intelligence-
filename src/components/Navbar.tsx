@@ -29,6 +29,12 @@ export function Navbar() {
           >
             Mapa
           </Link>
+          <Link
+            href="/mejores-sitios"
+            className="rounded-full px-3 py-1.5 text-muted hover:text-foreground hover:bg-surface transition-colors whitespace-nowrap hidden sm:inline-block"
+          >
+            🏆 Mejores sitios
+          </Link>
         </nav>
       </div>
     </header>

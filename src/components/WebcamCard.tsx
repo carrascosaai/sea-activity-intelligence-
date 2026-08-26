@@ -1,9 +1,7 @@
 import type { Webcam } from "@/lib/webcams";
 
 export function WebcamCard({ webcam }: { webcam: Webcam }) {
-  const embedSrc = webcam.youtubeChannelId
-    ? `https://www.youtube.com/embed/live_stream?channel=${webcam.youtubeChannelId}&autoplay=0`
-    : `https://www.youtube.com/embed/${webcam.youtubeVideoId}?autoplay=0`;
+  const embedSrc = `https://www.youtube.com/embed/${webcam.youtubeVideoId}?autoplay=0`;
 
   return (
     <div className="rounded-2xl bg-surface border border-border p-4">

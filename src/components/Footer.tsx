@@ -14,6 +14,9 @@ export function Footer() {
           <Link href="/mapa" className="hover:text-foreground transition-colors">
             Mapa
           </Link>
+          <Link href="/mejores-sitios" className="hover:text-foreground transition-colors">
+            Mejores sitios
+          </Link>
           <Link href="/privacidad" className="hover:text-foreground transition-colors">
             Privacidad
           </Link>
