@@ -39,6 +39,8 @@ import { getCommunityReports } from "@/lib/communityReports";
 import { CommunityReports, type CommunityReportView } from "@/components/CommunityReports";
 import { getWebcam } from "@/lib/webcams";
 import { WebcamCard } from "@/components/WebcamCard";
+import { BOARD_GUIDES } from "@/lib/boardGuides";
+import { BoardGuideCard } from "@/components/BoardGuideCard";
 
 const VALID_ACTIVITIES = new Set(ACTIVITIES.map((a) => a.id));
 const VALID_LEVELS = new Set<SkillLevel>(["principiante", "intermedio", "avanzado"]);
@@ -150,6 +152,7 @@ export default async function ResultadoPage({
   }
 
   const webcam = getWebcam(location.slug);
+  const boardGuide = BOARD_GUIDES[activityId] ?? null;
 
   const nearbyShops: NearbyShopView[] = nearbyShopsRaw.map((s) => ({
     slug: s.slug,
@@ -281,6 +284,12 @@ export default async function ResultadoPage({
       {showFishing && (
         <div className="mt-6">
           <FishingInfoCard info={fishingInfo} piers={nearbyPiers} />
+        </div>
+      )}
+
+      {boardGuide && (
+        <div className="mt-6">
+          <BoardGuideCard guide={boardGuide} activityName={activity.name} />
         </div>
       )}
 
