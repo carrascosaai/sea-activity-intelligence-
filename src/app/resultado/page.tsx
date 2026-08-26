@@ -39,6 +39,7 @@ import { getCommunityReports } from "@/lib/communityReports";
 import { CommunityReports, type CommunityReportView } from "@/components/CommunityReports";
 import { getWebcam } from "@/lib/webcams";
 import { WebcamCard } from "@/components/WebcamCard";
+import { WebcamSearchLink } from "@/components/WebcamSearchLink";
 import { BOARD_GUIDES } from "@/lib/boardGuides";
 import { BoardGuideCard } from "@/components/BoardGuideCard";
 
@@ -238,11 +239,9 @@ export default async function ResultadoPage({
         </div>
       </div>
 
-      {webcam && (
-        <div className="mt-6">
-          <WebcamCard webcam={webcam} />
-        </div>
-      )}
+      <div className="mt-6">
+        {webcam ? <WebcamCard webcam={webcam} /> : <WebcamSearchLink locationLabel={displayName(location)} />}
+      </div>
 
       {showClarity && visibility && (
         <div className="mt-6">
