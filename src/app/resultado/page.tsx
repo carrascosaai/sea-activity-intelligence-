@@ -37,6 +37,8 @@ import { piersNear } from "@/lib/piers";
 import { FishingInfoCard } from "@/components/FishingInfoCard";
 import { getCommunityReports } from "@/lib/communityReports";
 import { CommunityReports, type CommunityReportView } from "@/components/CommunityReports";
+import { getWebcam } from "@/lib/webcams";
+import { WebcamCard } from "@/components/WebcamCard";
 
 const VALID_ACTIVITIES = new Set(ACTIVITIES.map((a) => a.id));
 const VALID_LEVELS = new Set<SkillLevel>(["principiante", "intermedio", "avanzado"]);
@@ -147,6 +149,8 @@ export default async function ResultadoPage({
     );
   }
 
+  const webcam = getWebcam(location.slug);
+
   const nearbyShops: NearbyShopView[] = nearbyShopsRaw.map((s) => ({
     slug: s.slug,
     name: s.name,
@@ -230,6 +234,12 @@ export default async function ResultadoPage({
           <ConditionsGrid snapshot={headline.snapshot} />
         </div>
       </div>
+
+      {webcam && (
+        <div className="mt-6">
+          <WebcamCard webcam={webcam} />
+        </div>
+      )}
 
       {showClarity && visibility && (
         <div className="mt-6">
