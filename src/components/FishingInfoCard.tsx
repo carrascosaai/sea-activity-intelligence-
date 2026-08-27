@@ -1,21 +1,41 @@
 import type { FishingInfo } from "@/lib/fishing";
 import type { Pier } from "@/lib/piers";
 import type { NearbySpecies } from "@/lib/fishOccurrences";
+import type { MoonPhaseInfo } from "@/lib/moonPhase";
 
 export function FishingInfoCard({
   info,
   piers,
   nearbySpecies,
+  moonPhase,
 }: {
   info: FishingInfo | null;
   piers: (Pier & { distanceKm: number })[];
   nearbySpecies: NearbySpecies[];
+  moonPhase: MoonPhaseInfo;
 }) {
   return (
     <div className="rounded-2xl bg-surface border border-border p-4">
       <div className="flex items-center justify-between mb-1">
         <h3 className="text-sm font-semibold text-muted uppercase tracking-wide">Pesca en la zona</h3>
         <span className="text-[10px] text-muted uppercase tracking-wide">{info?.basinLabel ?? "General"}</span>
+      </div>
+
+      <div className="mb-3 pb-3 border-b border-border/60 flex items-center justify-between gap-3">
+        <div>
+          <p className="text-sm font-medium">
+            {moonPhase.emoji} {moonPhase.phaseName}
+          </p>
+          <p className="text-xs text-muted mt-0.5">
+            {moonPhase.illuminationPct}% de iluminación
+            {moonPhase.highSolunarActivity && " · fase de mareas vivas"}
+          </p>
+        </div>
+        {moonPhase.highSolunarActivity && (
+          <span className="text-[11px] text-accent text-right max-w-[45%]">
+            Según la teoría solunar tradicional (no probada científicamente), suele haber más actividad
+          </span>
+        )}
       </div>
 
       {nearbySpecies.length > 0 && (

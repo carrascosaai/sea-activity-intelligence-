@@ -35,6 +35,9 @@ import { seaBasinForLocation } from "@/lib/seaBasin";
 import { FISHING_INFO } from "@/lib/fishing";
 import { piersNear } from "@/lib/piers";
 import { speciesNear } from "@/lib/fishOccurrences";
+import { computeRipRisk } from "@/lib/ripCurrentRisk";
+import { RipCurrentCard } from "@/components/RipCurrentCard";
+import { getMoonPhase } from "@/lib/moonPhase";
 import { FishingInfoCard } from "@/components/FishingInfoCard";
 import { getCommunityReports } from "@/lib/communityReports";
 import { CommunityReports, type CommunityReportView } from "@/components/CommunityReports";
@@ -117,6 +120,8 @@ export default async function ResultadoPage({
   const fishingInfo = seaBasin ? FISHING_INFO[seaBasin] : null;
   const nearbyPiers = showFishing ? piersNear(location.lat, location.lon, { radiusKm: 12, limit: 5 }) : [];
   const nearbyFishSpecies = showFishing ? speciesNear(location.lat, location.lon, 20) : [];
+  const [dYear, dMonth, dDay] = dateISO.split("-").map(Number);
+  const moonPhase = getMoonPhase(new Date(Date.UTC(dYear, dMonth - 1, dDay, 12)));
 
   let snapshots;
   let visibility: VisibilityInfo | null;
@@ -178,6 +183,7 @@ export default async function ResultadoPage({
       : findClosestHourIndex(hourly, bestWindow ? hourFromISO(bestWindow.startTime) : 12);
   const headline = hourly[headlineIdx];
   const headlineMeta = BAND_META[headline.band];
+  const ripRisk = computeRipRisk(headline.snapshot.waveHeightM, headline.snapshot.wavePeriodS);
 
   const crossScores = ACTIVITIES.map((a) => {
     const result = scoreCondition(a.id, level, headline.snapshot);
@@ -242,6 +248,10 @@ export default async function ResultadoPage({
       </div>
 
       <div className="mt-6">
+        <RipCurrentCard risk={ripRisk} />
+      </div>
+
+      <div className="mt-6">
         {webcam ? <WebcamCard webcam={webcam} /> : <WebcamSearchLink locationLabel={displayName(location)} />}
       </div>
 
@@ -284,7 +294,7 @@ export default async function ResultadoPage({
 
       {showFishing && (
         <div className="mt-6">
-          <FishingInfoCard info={fishingInfo} piers={nearbyPiers} nearbySpecies={nearbyFishSpecies} />
+          <FishingInfoCard info={fishingInfo} piers={nearbyPiers} nearbySpecies={nearbyFishSpecies} moonPhase={moonPhase} />
         </div>
       )}
 
