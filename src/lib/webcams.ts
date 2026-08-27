@@ -42,6 +42,10 @@ export const WEBCAMS: Record<string, Webcam> = {
     youtubeVideoId: "7i5qu1dotFY",
     source: "Webcam Benidorm — Playa de Levante, meteo365.es (YouTube)",
   },
+  "dunas-de-corralejo-las-palmas": {
+    youtubeVideoId: "bgGZxUpAqk0",
+    source: "Live Webcam of Corralejo Bay, Fuerteventura (YouTube)",
+  },
 };
 
 export function getWebcam(locationSlug: string): Webcam | null {

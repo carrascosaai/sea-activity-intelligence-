@@ -1,12 +1,15 @@
 import type { FishingInfo } from "@/lib/fishing";
 import type { Pier } from "@/lib/piers";
+import type { NearbySpecies } from "@/lib/fishOccurrences";
 
 export function FishingInfoCard({
   info,
   piers,
+  nearbySpecies,
 }: {
   info: FishingInfo | null;
   piers: (Pier & { distanceKm: number })[];
+  nearbySpecies: NearbySpecies[];
 }) {
   return (
     <div className="rounded-2xl bg-surface border border-border p-4">
@@ -15,13 +18,33 @@ export function FishingInfoCard({
         <span className="text-[10px] text-muted uppercase tracking-wide">{info?.basinLabel ?? "General"}</span>
       </div>
 
+      {nearbySpecies.length > 0 && (
+        <div className="mb-3 pb-3 border-b border-border/60">
+          <p className="text-xs uppercase tracking-wide text-accent mb-1.5">Especies observadas de verdad cerca de aquí</p>
+          <ul className="flex flex-col gap-1 mb-1.5">
+            {nearbySpecies.map((s) => (
+              <li key={s.id} className="flex items-baseline justify-between gap-3 text-sm py-1 border-b border-border/40 last:border-0">
+                <span className="font-medium shrink-0">{s.commonName}</span>
+                <span className="text-muted text-right">{s.bait}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="text-[11px] text-muted">
+            Basado en registros reales de biodiversidad ciudadana (GBIF / iNaturalist) a menos de 20 km — no es una
+            garantía de que piquen hoy, pero sí que esa especie vive de verdad en esta zona.
+          </p>
+        </div>
+      )}
+
       {info ? (
         <>
           <p className="text-xs text-muted mb-3">
             Conocimiento general de la costa {info.basinLabel.toLowerCase()}, no una medición de esta playa exacta.
           </p>
 
-          <p className="text-xs uppercase tracking-wide text-muted mb-1.5">Especies habituales y su cebo</p>
+          <p className="text-xs uppercase tracking-wide text-muted mb-1.5">
+            {nearbySpecies.length > 0 ? "Otras especies habituales de la zona (general)" : "Especies habituales y su cebo"}
+          </p>
           <ul className="flex flex-col gap-1 mb-3">
             {info.speciesBait.map((sb) => (
               <li key={sb.species} className="flex items-baseline justify-between gap-3 text-sm py-1 border-b border-border/40 last:border-0">

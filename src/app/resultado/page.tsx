@@ -34,6 +34,7 @@ import { TechnicalDetails } from "@/components/TechnicalDetails";
 import { seaBasinForLocation } from "@/lib/seaBasin";
 import { FISHING_INFO } from "@/lib/fishing";
 import { piersNear } from "@/lib/piers";
+import { speciesNear } from "@/lib/fishOccurrences";
 import { FishingInfoCard } from "@/components/FishingInfoCard";
 import { getCommunityReports } from "@/lib/communityReports";
 import { CommunityReports, type CommunityReportView } from "@/components/CommunityReports";
@@ -115,6 +116,7 @@ export default async function ResultadoPage({
   const seaBasin = showFishing ? seaBasinForLocation(location) : null;
   const fishingInfo = seaBasin ? FISHING_INFO[seaBasin] : null;
   const nearbyPiers = showFishing ? piersNear(location.lat, location.lon, { radiusKm: 12, limit: 5 }) : [];
+  const nearbyFishSpecies = showFishing ? speciesNear(location.lat, location.lon, 20) : [];
 
   let snapshots;
   let visibility: VisibilityInfo | null;
@@ -282,7 +284,7 @@ export default async function ResultadoPage({
 
       {showFishing && (
         <div className="mt-6">
-          <FishingInfoCard info={fishingInfo} piers={nearbyPiers} />
+          <FishingInfoCard info={fishingInfo} piers={nearbyPiers} nearbySpecies={nearbyFishSpecies} />
         </div>
       )}
 
