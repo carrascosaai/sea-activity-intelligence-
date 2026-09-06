@@ -24,7 +24,7 @@ export function TechnicalDetails({ snapshot }: { snapshot: ConditionSnapshot }) 
   const windName = namedWind(snapshot.windDirectionDeg);
 
   return (
-    <div className="rounded-2xl bg-surface border border-border p-4">
+    <div className="border-t-2 border-border pt-4">
       <div className="flex items-center justify-between mb-1">
         <h3 className="text-sm font-semibold text-muted uppercase tracking-wide">Datos técnicos completos</h3>
         <span className="text-[10px] text-muted uppercase tracking-wide">Open-Meteo</span>

@@ -36,6 +36,7 @@
   --color-score-orange: var(--score-orange);
   --color-score-red: var(--score-red);
   --font-sans: var(--font-system);
+  --font-display-stack: var(--font-display), var(--font-system);
 }
 
 body {
@@ -43,6 +44,27 @@ body {
   color: var(--foreground);
   font-family: var(--font-system);
   min-height: 100svh;
+  position: relative;
+}
+
+/* Grano sutil sobre el fondo — sin esto, un degradado plano de color sólido
+   es exactamente el aspecto "panel genérico" de cualquier plantilla. Este
+   truco (textura de ruido muy tenue) lo usan productos reales (Linear,
+   Stripe...) para que el fondo se note trabajado en vez de un color liso. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+body > * {
+  position: relative;
+  z-index: 1;
 }
 
 ::selection {
@@ -61,6 +83,17 @@ html {
 
 .text-balance {
   text-wrap: balance;
+}
+
+/* Tipografía de titulares propia (ver layout.tsx) — le da identidad visual
+   a los títulos y al nombre de marca en vez de la tipografía del sistema
+   genérica, sin tocar el cuerpo de texto (mejor legibilidad en párrafos). */
+h1,
+h2,
+h3,
+.font-display {
+  font-family: var(--font-display-stack);
+  letter-spacing: -0.01em;
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {

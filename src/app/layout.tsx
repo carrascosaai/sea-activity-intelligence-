@@ -1,7 +1,21 @@
 import type { Metadata, Viewport } from "next";
+import localFont from "next/font/local";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import "./globals.css";
+
+// Tipografía de titulares propia (autoalojada, sin depender de ninguna red en
+// producción — el archivo va en el propio despliegue, igual de fiable que la
+// fuente del sistema). Space Grotesk (OFL, ver src/fonts/SpaceGrotesk-OFL.txt)
+// le da identidad visual real a los títulos en vez de la tipografía del
+// sistema genérica que usa cualquier plantilla — el cuerpo de texto se queda
+// en la fuente nativa por legibilidad en párrafos largos.
+const displayFont = localFont({
+  src: "../fonts/SpaceGrotesk-Variable.ttf",
+  variable: "--font-display",
+  display: "swap",
+  weight: "300 700",
+});
 
 const SITE_DESCRIPTION =
   "Convierte el viento, el oleaje y el tiempo en una decisión clara: qué actividad acuática hacer, dónde y cuándo. 20 deportes, toda la costa de España.";
@@ -42,7 +56,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="es" className="h-full antialiased">
+    <html lang="es" className={`h-full antialiased ${displayFont.variable}`}>
       <body className="min-h-full flex flex-col">
         <Navbar />
         {children}

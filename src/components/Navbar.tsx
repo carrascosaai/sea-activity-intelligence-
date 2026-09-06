@@ -8,7 +8,7 @@ export function Navbar() {
       <div className="max-w-5xl mx-auto px-5 py-3.5 flex items-center justify-between gap-4">
         <Link href="/" className="flex items-center gap-2 group shrink-0">
           <Logo size={26} />
-          <span className="hidden sm:inline font-bold tracking-tight text-[15px] group-hover:text-accent transition-colors">
+          <span className="hidden sm:inline font-display font-semibold tracking-tight text-[16px] group-hover:text-accent transition-colors">
             Sea Activity Intelligence
           </span>
         </Link>
