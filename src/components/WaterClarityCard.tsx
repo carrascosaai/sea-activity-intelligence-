@@ -14,7 +14,7 @@ export function WaterClarityCard({ visibility, locationLabel }: { visibility: Vi
   const webcamSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(`webcam en directo ${locationLabel} playa`)}&tbm=isch`;
 
   return (
-    <div className="rounded-2xl bg-surface border border-border p-4">
+    <div className="rounded-xl bg-surface border border-border p-4">
       <div className="flex items-center justify-between mb-1">
         <h3 className="text-sm font-semibold text-muted uppercase tracking-wide">Claridad del agua</h3>
         <span className="text-[10px] text-muted uppercase tracking-wide">Estimación por satélite</span>

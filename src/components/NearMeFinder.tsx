@@ -88,7 +88,7 @@ export function NearMeFinder() {
           {level && (
             <button
               onClick={requestLocation}
-              className="mt-2 rounded-2xl bg-accent text-[#04231d] font-semibold py-4 text-base hover:opacity-90 transition-opacity cursor-pointer flex items-center justify-center gap-2"
+              className="mt-2 rounded-xl bg-accent text-[#04231d] font-semibold py-4 text-base hover:opacity-90 transition-opacity cursor-pointer flex items-center justify-center gap-2"
             >
               <MapPin className="w-[18px] h-[18px]" strokeWidth={2.25} /> Usar mi ubicación
             </button>
@@ -154,7 +154,7 @@ export function NearMeFinder() {
                   <Link
                     key={`${r.slug}-${r.activity}`}
                     href={`/resultado?activity=${r.activity}&location=${r.slug}&level=${level}&when=now`}
-                    className="rounded-2xl border border-border bg-surface px-4 py-3.5 hover:border-accent/50 transition-colors block"
+                    className="rounded-xl border border-border bg-surface px-4 py-3.5 hover:border-accent/50 transition-colors block"
                   >
                     <div className="flex items-center justify-between">
                       <span className="flex items-center gap-2.5">

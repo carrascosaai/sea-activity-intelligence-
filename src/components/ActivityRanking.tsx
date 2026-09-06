@@ -26,7 +26,7 @@ export function ActivityRanking({
             <Link
               key={r.activity}
               href={`/resultado?activity=${r.activity}&location=${locationSlug}&level=${level}&when=now`}
-              className="flex items-center justify-between rounded-2xl border border-border bg-surface px-4 py-3 hover:border-accent/50 transition-colors"
+              className="flex items-center justify-between rounded-xl border border-border bg-surface px-4 py-3 hover:border-accent/50 transition-colors"
             >
               <span className="flex items-center gap-3">
                 <RankBadge index={i} />
@@ -45,7 +45,7 @@ export function ActivityRanking({
           <h3 className="text-sm font-semibold text-muted mb-3 uppercase tracking-wide">No recomendado</h3>
           <div className="flex flex-col gap-2">
             {notRecommended.map((r) => (
-              <div key={r.activity} className="flex items-center justify-between rounded-2xl border border-border bg-surface/50 px-4 py-3 opacity-70">
+              <div key={r.activity} className="flex items-center justify-between rounded-xl border border-border bg-surface/50 px-4 py-3 opacity-70">
                 <span className="flex items-center gap-3 font-medium">
                   <ActivityBadge emoji={r.emoji} category={getActivity(r.activity).category} size="sm" />
                   {r.name}

@@ -6,7 +6,7 @@ import type { Location } from "@/lib/types";
 
 function SkeletonRow() {
   return (
-    <div className="rounded-2xl border border-border bg-surface px-5 py-4 animate-pulse">
+    <div className="rounded-xl border border-border bg-surface px-5 py-4 animate-pulse">
       <div className="h-3.5 w-2/5 rounded bg-surface-2" />
       <div className="h-2.5 w-1/4 rounded bg-surface-2 mt-2" />
     </div>

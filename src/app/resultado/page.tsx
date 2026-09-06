@@ -232,7 +232,7 @@ export default async function ResultadoPage({
       </div>
 
       <div
-        className={`rounded-3xl border ${headlineMeta.ringClass} ${headlineMeta.bgClass} p-6 mt-4 flex flex-col items-center text-center gap-3 shadow-2xl shadow-black/20 animate-fade-up`}
+        className={`rounded-2xl border ${headlineMeta.ringClass} ${headlineMeta.bgClass} p-6 mt-4 flex flex-col items-center text-center gap-3 shadow-xl shadow-black/20 animate-fade-up`}
       >
         <BandPill band={headline.band} />
         <ScoreBadge score={headline.score} band={headline.band} size="lg" />
@@ -282,7 +282,7 @@ export default async function ResultadoPage({
       </div>
 
       {bestWindow && (
-        <div className="mt-6 rounded-2xl bg-surface-2 border border-border p-4 text-center">
+        <div className="mt-6 rounded-xl bg-surface-2 border border-border p-4 text-center">
           <p className="text-xs uppercase tracking-wide text-muted">
             Mejor momento {when === "tomorrow" ? "mañana" : when === "date" ? "ese día" : "hoy"}
           </p>

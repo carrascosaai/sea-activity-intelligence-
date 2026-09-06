@@ -11,7 +11,7 @@ export function RipCurrentCard({ risk }: { risk: RipRiskResult }) {
   const style = LEVEL_STYLE[risk.level];
 
   return (
-    <div className={`rounded-2xl border p-4 ${style.bg} ring-1 ${style.ring} border-transparent`}>
+    <div className={`rounded-xl border p-4 ${style.bg} ring-1 ${style.ring} border-transparent`}>
       <div className="flex items-center justify-between mb-1">
         <h3 className="text-sm font-semibold text-muted uppercase tracking-wide">Corrientes de retorno</h3>
         <span className="text-[10px] text-muted uppercase tracking-wide">Estimación</span>

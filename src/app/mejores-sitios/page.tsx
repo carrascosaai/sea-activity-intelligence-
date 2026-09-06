@@ -45,7 +45,7 @@ export default async function MejoresSitiosPage({
         <TopSpotsControls activity={activityId} activities={AVAILABLE_ACTIVITIES} />
       </div>
 
-      <div className="rounded-2xl bg-surface-2 border border-border p-4 mb-6">
+      <div className="rounded-xl bg-surface-2 border border-border p-4 mb-6">
         <p className="text-sm flex items-center gap-2">
           <ActivityBadge emoji={activity.emoji} category={activity.category} size="sm" />
           <span className="font-semibold">{activity.name}</span>
@@ -59,7 +59,7 @@ export default async function MejoresSitiosPage({
             <h2 className="text-xs uppercase tracking-wide text-muted mb-2.5">{region}</h2>
             <div className="flex flex-col gap-3">
               {spots.map((spot) => (
-                <div key={spot.name} className="rounded-2xl bg-surface border border-border p-4">
+                <div key={spot.name} className="rounded-xl bg-surface border border-border p-4">
                   <p className="text-base font-semibold">{spot.name}</p>
                   <p className="text-sm text-foreground/90 mt-1">{spot.why}</p>
                   <p className="text-xs text-muted mt-2">

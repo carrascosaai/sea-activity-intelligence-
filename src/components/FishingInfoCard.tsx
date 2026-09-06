@@ -16,7 +16,7 @@ export function FishingInfoCard({
   moonPhase: MoonPhaseInfo;
 }) {
   return (
-    <div className="rounded-2xl bg-surface border border-border p-4">
+    <div className="rounded-xl bg-surface border border-border p-4">
       <div className="flex items-center justify-between mb-1">
         <h3 className="text-sm font-semibold text-muted uppercase tracking-wide">Pesca en la zona</h3>
         <span className="text-[10px] text-muted uppercase tracking-wide">{info?.basinLabel ?? "General"}</span>

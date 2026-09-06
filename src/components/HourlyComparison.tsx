@@ -5,7 +5,7 @@ import type { HourlyScore } from "@/lib/types";
 
 export function HourlyComparison({ hourly, highlightTime }: { hourly: HourlyScore[]; highlightTime?: string }) {
   return (
-    <div className="rounded-2xl bg-surface border border-border p-4">
+    <div className="rounded-xl bg-surface border border-border p-4">
       <h3 className="text-sm font-semibold text-muted mb-3 uppercase tracking-wide">Comparación por hora</h3>
       <div className="flex flex-col divide-y divide-border">
         {hourly.map((h) => {

@@ -16,7 +16,7 @@ export function BoardGuideCard({ guide, activityName }: { guide: BoardGuide; act
   const shopUrl = `https://www.google.com/search?q=${encodeURIComponent(`comprar o alquilar ${guide.searchQuery}`)}&tbm=shop`;
 
   return (
-    <div className="rounded-2xl bg-surface border border-border p-4">
+    <div className="rounded-xl bg-surface border border-border p-4">
       <div className="flex items-center justify-between mb-1">
         <h3 className="text-sm font-semibold text-muted uppercase tracking-wide">Qué tabla usar</h3>
         <span className="text-[10px] text-muted uppercase tracking-wide">Orientativo</span>

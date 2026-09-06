@@ -22,7 +22,7 @@ export function CrossRecommendation({
   const better = getActivity(betterActivity);
 
   return (
-    <div className="rounded-2xl border border-accent/30 bg-accent/5 p-4">
+    <div className="rounded-xl border border-accent/30 bg-accent/5 p-4">
       <div className="flex items-center justify-between text-sm">
         <span className="flex items-center gap-2">
           <ActivityBadge emoji={current.emoji} category={current.category} size="sm" />

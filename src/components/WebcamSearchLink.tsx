@@ -12,7 +12,7 @@ export function WebcamSearchLink({ locationLabel }: { locationLabel: string }) {
       href={searchUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex items-center gap-2 rounded-2xl bg-surface border border-border p-4 hover:border-accent/40 transition-colors"
+      className="flex items-center gap-2 rounded-xl bg-surface border border-border p-4 hover:border-accent/40 transition-colors"
     >
       <span className="flex items-center justify-center w-9 h-9 rounded-full bg-accent/15 text-accent shrink-0">
         <Camera className="w-[18px] h-[18px]" strokeWidth={2} />

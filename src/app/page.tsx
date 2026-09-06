@@ -78,7 +78,7 @@ export default function Home() {
       {stepIdx === 0 && (
         <Link
           href="/cerca-de-mi"
-          className="mb-6 rounded-2xl border border-accent/30 bg-accent/10 px-4 py-3.5 flex items-center justify-between gap-3 hover:bg-accent/15 transition-colors"
+          className="mb-6 rounded-xl border border-accent/30 bg-accent/10 px-4 py-3.5 flex items-center justify-between gap-3 hover:bg-accent/15 transition-colors"
         >
           <span className="flex items-center gap-2.5">
             <span className="flex items-center justify-center w-9 h-9 rounded-full bg-accent/15 text-accent shrink-0">

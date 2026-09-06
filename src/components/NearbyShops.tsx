@@ -67,7 +67,7 @@ function ShopRatingStars({ slug, initialAvg, initialCount }: { slug: string; ini
 export function NearbyShops({ shops, activityName }: { shops: NearbyShopView[]; activityName: string }) {
   if (shops.length === 0) {
     return (
-      <div className="rounded-2xl bg-surface border border-border p-4">
+      <div className="rounded-xl bg-surface border border-border p-4">
         <h3 className="text-sm font-semibold text-muted uppercase tracking-wide mb-1">Tiendas cerca</h3>
         <p className="text-sm text-muted">
           No encontramos tiendas de {activityName.toLowerCase()} registradas cerca de esta playa en OpenStreetMap.
@@ -77,7 +77,7 @@ export function NearbyShops({ shops, activityName }: { shops: NearbyShopView[]; 
   }
 
   return (
-    <div className="rounded-2xl bg-surface border border-border p-4">
+    <div className="rounded-xl bg-surface border border-border p-4">
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-sm font-semibold text-muted uppercase tracking-wide">Tiendas cerca</h3>
         <span className="text-[10px] text-muted uppercase tracking-wide">OpenStreetMap</span>

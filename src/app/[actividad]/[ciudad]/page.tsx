@@ -113,7 +113,7 @@ export default async function ActividadCiudadPage({
         </p>
       </div>
 
-      <div className={`rounded-3xl border ${headlineMeta.ringClass} ${headlineMeta.bgClass} p-6 flex flex-col items-center text-center gap-2`}>
+      <div className={`rounded-xl border ${headlineMeta.ringClass} ${headlineMeta.bgClass} p-6 flex flex-col items-center text-center gap-2`}>
         <BandPill band={headline.scoresByLevel.intermedio.band} />
         <p className="text-4xl font-bold tabular-nums">{headline.scoresByLevel.intermedio.score}/100</p>
         <p className="text-sm font-medium">{headline.beach.name}</p>
@@ -159,7 +159,7 @@ export default async function ActividadCiudadPage({
                 <Link
                   key={beach.slug}
                   href={`/resultado?activity=${activityId}&location=${beach.slug}&level=intermedio&when=now`}
-                  className="flex items-center justify-between rounded-2xl border border-border bg-surface px-4 py-3 hover:border-accent/50 transition-colors"
+                  className="flex items-center justify-between rounded-xl border border-border bg-surface px-4 py-3 hover:border-accent/50 transition-colors"
                 >
                   <span className="font-medium">{beach.name}</span>
                   <span className={`font-bold flex items-center gap-1.5 ${meta.textClass}`}>

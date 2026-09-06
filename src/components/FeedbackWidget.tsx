@@ -34,14 +34,14 @@ export function FeedbackWidget({
 
   if (answered) {
     return (
-      <div className="rounded-2xl bg-surface-2 border border-border p-4 text-center text-sm text-muted">
+      <div className="rounded-xl bg-surface-2 border border-border p-4 text-center text-sm text-muted">
         Gracias — nos ayuda a ajustar cómo puntuamos {activity === "bano" ? "el baño" : `${activity}`}.
       </div>
     );
   }
 
   return (
-    <div className="rounded-2xl bg-surface-2 border border-border p-4 flex items-center justify-between gap-3">
+    <div className="rounded-xl bg-surface-2 border border-border p-4 flex items-center justify-between gap-3">
       <p className="text-sm text-foreground/90">¿Esta recomendación se ajustó a lo que encontraste?</p>
       <div className="flex gap-2 shrink-0">
         <button
