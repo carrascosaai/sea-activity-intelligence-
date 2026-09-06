@@ -14,7 +14,7 @@ export default function OpengraphImage() {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          background: "linear-gradient(160deg, #0f2438 0%, #071019 60%)",
+          background: "linear-gradient(160deg, #101a18 0%, #0a120f 60%)",
           position: "relative",
         }}
       >
@@ -32,11 +32,11 @@ export default function OpengraphImage() {
         />
         <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
           <svg width="96" height="96" viewBox="0 0 64 64">
-            <rect width="64" height="64" rx="14" fill="#0f2438" />
+            <rect width="64" height="64" rx="14" fill="#101a18" />
             <path
               d="M8 40c4-5 10-5 14 0s10 5 14 0 10-5 14 0 10 5 14 0"
               fill="none"
-              stroke="#21d6b8"
+              stroke="#2f9c8c"
               strokeWidth="4.5"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -44,7 +44,7 @@ export default function OpengraphImage() {
             <path
               d="M8 50c4-5 10-5 14 0s10 5 14 0 10-5 14 0 10 5 14 0"
               fill="none"
-              stroke="#2f9de0"
+              stroke="#4a72c9"
               strokeWidth="4.5"
               strokeLinecap="round"
               strokeLinejoin="round"

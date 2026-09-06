@@ -12,8 +12,8 @@ export function HeroIllustration() {
     >
       <defs>
         <linearGradient id="hero-sky" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#0f2438" />
-          <stop offset="100%" stopColor="#071019" stopOpacity="0" />
+          <stop offset="0%" stopColor="#101a18" />
+          <stop offset="100%" stopColor="#0a120f" stopOpacity="0" />
         </linearGradient>
         <radialGradient id="hero-sun" cx="50%" cy="50%" r="50%">
           <stop offset="0%" stopColor="#f3ad3d" stopOpacity="0.9" />
@@ -25,8 +25,8 @@ export function HeroIllustration() {
           <stop offset="100%" stopColor="#f2884a" />
         </linearGradient>
         <linearGradient id="hero-wave-1" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor="#21d6b8" />
-          <stop offset="100%" stopColor="#2f9de0" />
+          <stop offset="0%" stopColor="#2f9c8c" />
+          <stop offset="100%" stopColor="#4a72c9" />
         </linearGradient>
       </defs>
 
@@ -42,10 +42,10 @@ export function HeroIllustration() {
 
       {/* Velero navegando en el horizonte. */}
       <g transform="translate(224 76)" opacity="0.92">
-        <path d="M0 8h34l-6 4H4Z" fill="#0f2438" />
+        <path d="M0 8h34l-6 4H4Z" fill="#101a18" />
         <path d="M2 8V-20c9 5 15 14 15 20Z" fill="#eaf3fa" opacity="0.92" />
         <path d="M-3 8V-10c-6 4-9 10-9 18Z" fill="#eaf3fa" opacity="0.7" />
-        <line x1="2" y1="8" x2="2" y2="-20" stroke="#0f2438" strokeWidth="1.2" />
+        <line x1="2" y1="8" x2="2" y2="-20" stroke="#101a18" strokeWidth="1.2" />
       </g>
 
       <path
@@ -55,12 +55,12 @@ export function HeroIllustration() {
       />
       <path
         d="M0 116c22-12 44-12 66 0s44 12 66 0 44-12 66 0 44 12 66 0 44-12 66 0 44 12 70 0v44H0Z"
-        fill="#2f9de0"
+        fill="#4a72c9"
         opacity="0.22"
       />
       <path
         d="M0 134c22-10 44-10 66 0s44 10 66 0 44-10 66 0 44 10 66 0 44-10 66 0 44 10 70 0v26H0Z"
-        fill="#21d6b8"
+        fill="#2f9c8c"
         opacity="0.3"
       />
     </svg>

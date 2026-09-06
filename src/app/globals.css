@@ -1,14 +1,20 @@
 @import "tailwindcss";
 
 :root {
-  --background: #070f19;
-  --surface: #0f1c2c;
-  --surface-2: #17293f;
+  /* Paleta revisada: el azul marino + teal brillante es, casi literalmente,
+     la combinación por defecto de cualquier herramienta que genera interfaces
+     — se ha vuelto reconocible por sí sola. Se mantiene la familia de color
+     (mar/noche), pero más apagada y con un matiz propio en vez del teal
+     saturado "de fábrica". Los colores de score (verde/ámbar/naranja/rojo)
+     NO se tocan: son información de seguridad, no de marca. */
+  --background: #0a120f;
+  --surface: #101a18;
+  --surface-2: #182420;
   --foreground: #eaf3fa;
-  --muted: #85a0b6;
-  --border: #1f3349;
-  --accent: #21d6b8;
-  --accent-2: #2f9de0;
+  --muted: #8aa39b;
+  --border: #223330;
+  --accent: #2f9c8c;
+  --accent-2: #4a72c9;
   --score-green: #2fd06a;
   --score-amber: #f3ad3d;
   --score-orange: #f2884a;
@@ -40,7 +46,7 @@
 }
 
 body {
-  background: radial-gradient(circle at 15% 0%, #0d2236 0%, var(--background) 55%);
+  background: radial-gradient(circle at 15% 0%, #142420 0%, var(--background) 55%);
   color: var(--foreground);
   font-family: var(--font-system);
   min-height: 100svh;

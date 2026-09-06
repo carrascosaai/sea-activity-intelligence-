@@ -3,7 +3,7 @@ import type { BoardShape } from "@/lib/boardGuides";
 // Color fijo (no depende de resolver la variable CSS dentro de un atributo
 // SVG, que en algunos navegadores/build no se resuelve bien) — mismo verde-
 // azulado que el resto del acento de la app.
-const ACCENT = "#21d6b8";
+const ACCENT = "#2f9c8c";
 const OUTLINE = { fill: `${ACCENT}33`, stroke: ACCENT, strokeWidth: 3 };
 const STRINGER = { stroke: `${ACCENT}66`, strokeWidth: 1.5 };
 const DETAIL = { fill: `${ACCENT}26`, stroke: `${ACCENT}b3`, strokeWidth: 1.5 };

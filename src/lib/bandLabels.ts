@@ -58,7 +58,7 @@ export const BAND_BAR_CLASS: Record<ScoreBand, string> = {
 /** Color hexadecimal por banda — para contextos que no aceptan clases Tailwind (Leaflet/SVG). */
 export const BAND_HEX: Record<ScoreBand, string> = {
   ideal: "#2fd06a",
-  buena: "#21d6b8",
+  buena: "#2f9c8c",
   aceptable: "#f3ad3d",
   mala: "#f2884a",
   peligrosa: "#f2564a",
