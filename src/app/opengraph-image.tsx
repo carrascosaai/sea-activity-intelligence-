@@ -31,7 +31,27 @@ export default function OpengraphImage() {
           }}
         />
         <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
-          <div style={{ fontSize: 96, display: "flex" }}>🌊</div>
+          <svg width="96" height="96" viewBox="0 0 64 64">
+            <rect width="64" height="64" rx="14" fill="#0f2438" />
+            <path
+              d="M8 40c4-5 10-5 14 0s10 5 14 0 10-5 14 0 10 5 14 0"
+              fill="none"
+              stroke="#21d6b8"
+              strokeWidth="4.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M8 50c4-5 10-5 14 0s10 5 14 0 10-5 14 0 10 5 14 0"
+              fill="none"
+              stroke="#2f9de0"
+              strokeWidth="4.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              opacity="0.85"
+            />
+            <circle cx="46" cy="16" r="6" fill="#f3ad3d" />
+          </svg>
           <div style={{ fontSize: 68, fontWeight: 700, color: "#eaf3fa", display: "flex" }}>
             Sea Activity Intelligence
           </div>

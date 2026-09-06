@@ -4,10 +4,13 @@ import { useState } from "react";
 import Link from "next/link";
 import { Chip } from "@/components/ui/Chip";
 import { WizardProgress } from "@/components/ui/WizardProgress";
+import { ActivityBadge } from "@/components/ui/ActivityBadge";
+import { RankBadge } from "@/components/ui/RankBadge";
 import { BAND_META } from "@/lib/bandLabels";
 import { ACTIVITIES, SKILL_LEVELS } from "@/lib/activities";
 import { track } from "@/lib/analytics";
-import type { ScoreBand, SkillLevel } from "@/lib/types";
+import type { ActivityCategory, ScoreBand, SkillLevel } from "@/lib/types";
+import { MapPin } from "lucide-react";
 
 interface NearbyResult {
   slug: string;
@@ -22,10 +25,8 @@ interface NearbyResult {
 
 type Status = "level" | "locating" | "denied" | "unsupported" | "error" | "results";
 
-const MEDALS = ["🥇", "🥈", "🥉"];
-
-function activityMeta(id: string) {
-  return ACTIVITIES.find((a) => a.id === id) ?? { emoji: "🌊", name: id };
+function activityMeta(id: string): { emoji: string; name: string; category: ActivityCategory } {
+  return ACTIVITIES.find((a) => a.id === id) ?? { emoji: "🌊", name: id, category: "otros" };
 }
 
 export function NearMeFinder() {
@@ -89,7 +90,7 @@ export function NearMeFinder() {
               onClick={requestLocation}
               className="mt-2 rounded-2xl bg-accent text-[#04231d] font-semibold py-4 text-base hover:opacity-90 transition-opacity cursor-pointer flex items-center justify-center gap-2"
             >
-              📍 Usar mi ubicación
+              <MapPin className="w-[18px] h-[18px]" strokeWidth={2.25} /> Usar mi ubicación
             </button>
           )}
           <Link href="/" className="text-center text-sm text-muted hover:text-accent mt-2">
@@ -100,14 +101,14 @@ export function NearMeFinder() {
 
       {status === "locating" && (
         <div className="flex-1 flex flex-col items-center justify-center gap-3 py-16 text-center">
-          <span className="text-4xl animate-pulse">📍</span>
+          <MapPin className="w-10 h-10 text-accent animate-pulse" strokeWidth={1.75} />
           <p className="text-sm text-muted">Localizándote y comparando las playas cercanas...</p>
         </div>
       )}
 
       {(status === "denied" || status === "unsupported" || status === "error") && (
         <div className="flex-1 flex flex-col items-center justify-center gap-3 py-16 text-center px-4">
-          <span className="text-4xl">📍</span>
+          <MapPin className="w-10 h-10 text-muted" strokeWidth={1.75} />
           <p className="text-base font-semibold">
             {status === "denied" && "No hemos podido acceder a tu ubicación."}
             {status === "unsupported" && "Tu navegador no admite geolocalización."}
@@ -157,10 +158,9 @@ export function NearMeFinder() {
                   >
                     <div className="flex items-center justify-between">
                       <span className="flex items-center gap-2.5">
-                        <span className="text-lg">{MEDALS[i] ?? "•"}</span>
-                        <span className="font-medium">
-                          {act.emoji} {act.name}
-                        </span>
+                        <RankBadge index={i} />
+                        <ActivityBadge emoji={act.emoji} category={act.category} size="sm" />
+                        <span className="font-medium">{act.name}</span>
                       </span>
                       <span className={`font-bold ${meta.textClass}`}>{r.score}/100</span>
                     </div>

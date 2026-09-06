@@ -1,3 +1,5 @@
+import { Camera } from "lucide-react";
+
 // Para las playas sin cámara verificada e insertada (la inmensa mayoría —
 // ver lib/webcams.ts): en vez de no ofrecer nada, un enlace de búsqueda real.
 // No es una cámara nuestra, es honesto sobre eso, pero da a cualquiera un
@@ -12,7 +14,9 @@ export function WebcamSearchLink({ locationLabel }: { locationLabel: string }) {
       rel="noopener noreferrer"
       className="flex items-center gap-2 rounded-2xl bg-surface border border-border p-4 hover:border-accent/40 transition-colors"
     >
-      <span className="text-xl">📷</span>
+      <span className="flex items-center justify-center w-9 h-9 rounded-full bg-accent/15 text-accent shrink-0">
+        <Camera className="w-[18px] h-[18px]" strokeWidth={2} />
+      </span>
       <span className="text-sm">
         <span className="block font-medium">Buscar una cámara en directo de esta zona</span>
         <span className="block text-xs text-muted mt-0.5">

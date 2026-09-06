@@ -2,6 +2,7 @@ import type { FishingInfo } from "@/lib/fishing";
 import type { Pier } from "@/lib/piers";
 import type { NearbySpecies } from "@/lib/fishOccurrences";
 import type { MoonPhaseInfo } from "@/lib/moonPhase";
+import { Mountain, BrickWall } from "lucide-react";
 
 export function FishingInfoCard({
   info,
@@ -95,8 +96,13 @@ export function FishingInfoCard({
             <ul className="flex flex-col gap-1.5">
               {piers.map((p) => (
                 <li key={p.slug} className="flex items-center justify-between text-sm">
-                  <span>
-                    {p.kind === "groyne" ? "🪨" : "🧱"} {p.name}
+                  <span className="flex items-center gap-1.5">
+                    {p.kind === "groyne" ? (
+                      <Mountain className="w-[15px] h-[15px] text-muted shrink-0" strokeWidth={2} />
+                    ) : (
+                      <BrickWall className="w-[15px] h-[15px] text-muted shrink-0" strokeWidth={2} />
+                    )}
+                    {p.name}
                   </span>
                   <span className="text-xs text-muted shrink-0 ml-2">
                     {p.distanceKm < 1 ? `${Math.round(p.distanceKm * 1000)} m` : `${p.distanceKm.toFixed(1)} km`}

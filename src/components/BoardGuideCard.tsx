@@ -1,5 +1,6 @@
 import type { BoardGuide } from "@/lib/boardGuides";
 import { BoardIllustration } from "@/components/BoardIllustration";
+import { ShoppingCart } from "lucide-react";
 
 const LEVEL_LABEL: Record<string, string> = {
   principiante: "Principiante",
@@ -49,9 +50,10 @@ export function BoardGuideCard({ guide, activityName }: { guide: BoardGuide; act
         href={shopUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center gap-1 text-xs text-accent hover:underline mt-3"
+        className="inline-flex items-center gap-1.5 text-xs text-accent hover:underline mt-3"
       >
-        🛒 Ver modelos reales de {activityName.toLowerCase()} en tiendas →
+        <ShoppingCart className="w-3.5 h-3.5" strokeWidth={2.25} /> Ver modelos reales de {activityName.toLowerCase()} en
+        tiendas →
       </a>
     </div>
   );

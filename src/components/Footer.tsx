@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Logo } from "@/components/ui/Logo";
 
 export function Footer() {
   return (
@@ -6,7 +7,7 @@ export function Footer() {
       <div className="max-w-5xl mx-auto px-5 py-6 flex flex-col gap-3 text-xs text-muted">
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
           <span className="flex items-center gap-1.5 font-medium text-foreground/70">
-            <span>🌊</span> Sea Activity Intelligence
+            <Logo size={16} /> Sea Activity Intelligence
           </span>
           <Link href="/hoy" className="hover:text-foreground transition-colors">
             ¿Qué hacer hoy?

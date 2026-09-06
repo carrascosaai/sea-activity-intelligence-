@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { BAND_META, isPoorBand } from "@/lib/bandLabels";
+import { getActivity } from "@/lib/activities";
+import { ActivityBadge } from "@/components/ui/ActivityBadge";
+import { RankBadge } from "@/components/ui/RankBadge";
 import type { ActivityId, ScoreBand } from "@/lib/types";
-
-const MEDALS = ["🥇", "🥈", "🥉"];
 
 export function ActivityRanking({
   ranked,
@@ -28,10 +29,9 @@ export function ActivityRanking({
               className="flex items-center justify-between rounded-2xl border border-border bg-surface px-4 py-3 hover:border-accent/50 transition-colors"
             >
               <span className="flex items-center gap-3">
-                <span className="text-xl">{MEDALS[i] ?? "•"}</span>
-                <span className="font-medium">
-                  {r.emoji} {r.name}
-                </span>
+                <RankBadge index={i} />
+                <ActivityBadge emoji={r.emoji} category={getActivity(r.activity).category} size="sm" />
+                <span className="font-medium">{r.name}</span>
               </span>
               <span className={`font-bold ${BAND_META[r.band].textClass}`}>{r.score}/100</span>
             </Link>
@@ -46,8 +46,9 @@ export function ActivityRanking({
           <div className="flex flex-col gap-2">
             {notRecommended.map((r) => (
               <div key={r.activity} className="flex items-center justify-between rounded-2xl border border-border bg-surface/50 px-4 py-3 opacity-70">
-                <span className="font-medium">
-                  {r.emoji} {r.name}
+                <span className="flex items-center gap-3 font-medium">
+                  <ActivityBadge emoji={r.emoji} category={getActivity(r.activity).category} size="sm" />
+                  {r.name}
                 </span>
                 <span className={`font-bold ${BAND_META[r.band].textClass}`}>{r.score}/100</span>
               </div>

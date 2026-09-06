@@ -5,6 +5,7 @@ import { ActivityRanking } from "@/components/ActivityRanking";
 import { ClientAnalyticsPing } from "@/components/ClientAnalyticsPing";
 import { SafetyNotice } from "@/components/SafetyNotice";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { MapPin } from "lucide-react";
 import { getLocationBySlug } from "@/lib/locations";
 import { ACTIVITIES } from "@/lib/activities";
 import { getDailySnapshots } from "@/lib/forecast";
@@ -84,8 +85,9 @@ export default async function HoyPage({
       </div>
 
       <h1 className="text-2xl font-bold mb-1">¿Qué puedo hacer hoy?</h1>
-      <p className="text-sm text-muted mb-6">
-        📍 {location.name} · 👤 <span className="capitalize">{level}</span>
+      <p className="text-sm text-muted mb-6 flex items-center gap-1.5">
+        <MapPin className="w-[15px] h-[15px]" strokeWidth={2.25} /> {location.name} ·{" "}
+        <span className="capitalize">{level}</span>
       </p>
 
       <ActivityRanking ranked={ranked} locationSlug={location.slug} level={level} />

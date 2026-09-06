@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { track } from "@/lib/analytics";
+import { Star, Phone, Globe } from "lucide-react";
 
 export interface NearbyShopView {
   slug: string;
@@ -50,9 +51,9 @@ function ShopRatingStars({ slug, initialAvg, initialCount }: { slug: string; ini
             onClick={() => vote(n)}
             onMouseEnter={() => setHover(n)}
             aria-label={`Valorar con ${n} estrella${n === 1 ? "" : "s"}`}
-            className="text-base leading-none px-0.5 cursor-pointer"
+            className="leading-none px-0.5 cursor-pointer text-score-amber"
           >
-            {(hover || 0) >= n ? "⭐" : "☆"}
+            <Star className="w-4 h-4" strokeWidth={2} fill={(hover || 0) >= n ? "currentColor" : "none"} />
           </button>
         ))}
       </div>
@@ -97,21 +98,26 @@ export function NearbyShops({ shops, activityName }: { shops: NearbyShopView[]; 
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => track("shop_maps_clicked", { shop: shop.slug })}
-                className="shrink-0 text-[11px] text-accent hover:underline whitespace-nowrap"
+                className="shrink-0 text-[11px] text-accent hover:underline whitespace-nowrap inline-flex items-center gap-1"
               >
-                ⭐ Ver en Maps ↗
+                <Star className="w-3 h-3" strokeWidth={2} /> Ver en Maps ↗
               </a>
             </div>
 
             <div className="flex items-center gap-3 mt-2 text-xs">
               {shop.phone && (
-                <a href={`tel:${shop.phone.replace(/\s+/g, "")}`} className="text-accent hover:underline">
-                  📞 Llamar
+                <a href={`tel:${shop.phone.replace(/\s+/g, "")}`} className="text-accent hover:underline inline-flex items-center gap-1">
+                  <Phone className="w-3 h-3" strokeWidth={2.25} /> Llamar
                 </a>
               )}
               {shop.website && (
-                <a href={shop.website} target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">
-                  🌐 Web
+                <a
+                  href={shop.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-accent hover:underline inline-flex items-center gap-1"
+                >
+                  <Globe className="w-3 h-3" strokeWidth={2.25} /> Web
                 </a>
               )}
             </div>
@@ -123,8 +129,8 @@ export function NearbyShops({ shops, activityName }: { shops: NearbyShopView[]; 
         ))}
       </div>
       <p className="text-[11px] text-muted mt-3 leading-relaxed">
-        Ubicaciones de OpenStreetMap, pueden estar desactualizadas. Las estrellas con ⭐ enlazan a las valoraciones
-        reales de Google Maps; las de abajo son de la comunidad de esta web.
+        Ubicaciones de OpenStreetMap, pueden estar desactualizadas. El enlace "Ver en Maps" lleva a las valoraciones
+        reales de Google Maps; las estrellas de abajo son de la comunidad de esta web.
       </p>
     </div>
   );

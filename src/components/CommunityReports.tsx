@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { track } from "@/lib/analytics";
 import { ACTIVITIES } from "@/lib/activities";
+import { ActivityBadge } from "@/components/ui/ActivityBadge";
 import type { ActivityId } from "@/lib/types";
 
 export interface CommunityReportView {
@@ -12,9 +13,7 @@ export interface CommunityReportView {
   createdAt: string;
 }
 
-const ACTIVITY_EMOJI: Partial<Record<ActivityId, string>> = Object.fromEntries(
-  ACTIVITIES.map((a) => [a.id, a.emoji])
-);
+const ACTIVITY_BY_ID = Object.fromEntries(ACTIVITIES.map((a) => [a.id, a]));
 
 function relativeTime(iso: string): string {
   const diffMs = Date.now() - new Date(iso).getTime();
@@ -78,11 +77,16 @@ export function CommunityReports({
         <ul className="flex flex-col gap-2 mb-3">
           {reports.map((r) => (
             <li key={r.id} className="rounded-xl bg-surface-2 border border-border/70 p-2.5">
-              <p className="text-sm">
-                {r.activityId && ACTIVITY_EMOJI[r.activityId as ActivityId] && (
-                  <span className="mr-1.5">{ACTIVITY_EMOJI[r.activityId as ActivityId]}</span>
+              <p className="text-sm flex items-start gap-1.5">
+                {r.activityId && ACTIVITY_BY_ID[r.activityId] && (
+                  <ActivityBadge
+                    emoji={ACTIVITY_BY_ID[r.activityId].emoji}
+                    category={ACTIVITY_BY_ID[r.activityId].category}
+                    size="sm"
+                    className="mt-px"
+                  />
                 )}
-                {r.body}
+                <span>{r.body}</span>
               </p>
               <p className="text-[11px] text-muted mt-1">{relativeTime(r.createdAt)}</p>
             </li>

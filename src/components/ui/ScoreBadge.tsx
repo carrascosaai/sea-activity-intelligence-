@@ -1,4 +1,5 @@
 import { BAND_HEX, BAND_META } from "@/lib/bandLabels";
+import { BandDot } from "@/components/ui/BandDot";
 import type { ScoreBand } from "@/lib/types";
 
 const SIZE_PX: Record<"sm" | "md" | "lg", number> = { sm: 48, md: 68, lg: 128 };
@@ -41,7 +42,7 @@ export function BandPill({ band }: { band: ScoreBand }) {
   const meta = BAND_META[band];
   return (
     <span className={`inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-semibold ${meta.bgClass} ${meta.textClass}`}>
-      <span>{meta.emoji}</span>
+      <BandDot band={band} />
       {meta.label}
     </span>
   );

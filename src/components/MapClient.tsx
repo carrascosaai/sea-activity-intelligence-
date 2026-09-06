@@ -8,8 +8,9 @@ import "leaflet/dist/leaflet.css";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import Link from "next/link";
-import { BAND_HEX, BAND_META } from "@/lib/bandLabels";
+import { BAND_HEX } from "@/lib/bandLabels";
 import { MapLegend } from "@/components/MapLegend";
+import { BandDot } from "@/components/ui/BandDot";
 import type { ActivityId, ScoreBand, SkillLevel } from "@/lib/types";
 
 const GOOD_BANDS = new Set<ScoreBand>(["ideal", "buena"]);
@@ -178,8 +179,8 @@ export function MapClient({
                   <div className="font-sans">
                     <p className="font-semibold text-[14px] mb-1 text-foreground">{loc.name}</p>
                     {scored ? (
-                      <p className="text-[13px] mb-2">
-                        {BAND_META[scored.band].emoji} <span className="font-semibold">{scored.score}</span>/100
+                      <p className="text-[13px] mb-2 flex items-center gap-1.5">
+                        <BandDot band={scored.band} /> <span className="font-semibold">{scored.score}</span>/100
                       </p>
                     ) : (
                       <p className="text-[13px] mb-2 text-muted">Condiciones aún sin calcular</p>

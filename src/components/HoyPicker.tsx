@@ -27,7 +27,7 @@ export function HoyPicker() {
 
       {step === "location" && (
         <div>
-          <h2 className="text-lg font-semibold mb-4">📍 ¿Dónde?</h2>
+          <h2 className="text-lg font-semibold mb-4">¿Dónde?</h2>
           <LocationSearch
             onSelect={(loc) => {
               setLocation(loc);
@@ -42,7 +42,7 @@ export function HoyPicker() {
       {step === "level" && (
         <div>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold">👤 ¿Qué nivel tienes?</h2>
+            <h2 className="text-lg font-semibold">¿Qué nivel tienes?</h2>
             <button onClick={() => setStep("location")} className="text-sm text-muted hover:text-accent cursor-pointer">
               ← Atrás
             </button>

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { track } from "@/lib/analytics";
+import { ThumbsUp, ThumbsDown } from "lucide-react";
 
 /**
  * Los umbrales de scoring (lib/scoring/profiles.ts) son estimaciones — grounded
@@ -47,17 +48,17 @@ export function FeedbackWidget({
           type="button"
           onClick={() => send(true)}
           aria-label="Sí, acertada"
-          className="rounded-full border border-border bg-surface px-3 py-1.5 text-lg hover:border-score-green/60 hover:bg-score-green/10 transition-colors cursor-pointer"
+          className="rounded-full border border-border bg-surface p-2.5 text-muted hover:text-score-green hover:border-score-green/60 hover:bg-score-green/10 transition-colors cursor-pointer"
         >
-          👍
+          <ThumbsUp className="w-[18px] h-[18px]" strokeWidth={2} />
         </button>
         <button
           type="button"
           onClick={() => send(false)}
           aria-label="No, no acertada"
-          className="rounded-full border border-border bg-surface px-3 py-1.5 text-lg hover:border-score-red/60 hover:bg-score-red/10 transition-colors cursor-pointer"
+          className="rounded-full border border-border bg-surface p-2.5 text-muted hover:text-score-red hover:border-score-red/60 hover:bg-score-red/10 transition-colors cursor-pointer"
         >
-          👎
+          <ThumbsDown className="w-[18px] h-[18px]" strokeWidth={2} />
         </button>
       </div>
     </div>

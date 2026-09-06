@@ -18,6 +18,8 @@ import {
 import type { ActivityId, SkillLevel, VisibilityInfo, WhenMode } from "@/lib/types";
 import { BAND_META } from "@/lib/bandLabels";
 import { ScoreBadge, BandPill } from "@/components/ui/ScoreBadge";
+import { ActivityBadge } from "@/components/ui/ActivityBadge";
+import { CheckCircle2, XCircle, CalendarDays } from "lucide-react";
 import { ConditionsGrid } from "@/components/ConditionsGrid";
 import { HourlyComparison } from "@/components/HourlyComparison";
 import { CrossRecommendation } from "@/components/CrossRecommendation";
@@ -211,7 +213,7 @@ export default async function ResultadoPage({
 
       {lowConfidence && (
         <div className="rounded-xl bg-surface-2 border border-border px-3.5 py-2.5 mb-4 text-xs text-muted flex items-start gap-2">
-          <span>📅</span>
+          <CalendarDays className="w-4 h-4 shrink-0 mt-px" strokeWidth={2} />
           <span>
             Faltan {daysFromToday(dateISO)} días — a esta distancia el pronóstico es orientativo, no
             exacto. Merece la pena mirarlo (mejor que no saber nada), pero conviene volver a
@@ -222,8 +224,9 @@ export default async function ResultadoPage({
 
       <div className="text-center mb-2 animate-fade-up">
         <p className="text-xs uppercase tracking-wide text-muted">{location.name}</p>
-        <h1 className="text-2xl font-bold mt-1">
-          {activity.emoji} {activity.name}
+        <h1 className="text-2xl font-bold mt-1 flex items-center justify-center gap-2.5">
+          <ActivityBadge emoji={activity.emoji} category={activity.category} size="md" />
+          {activity.name}
         </h1>
         <p className="text-sm text-muted capitalize">{level}</p>
       </div>
@@ -267,7 +270,11 @@ export default async function ResultadoPage({
           {headline.snapshot &&
             scoreCondition(activityId, level, headline.snapshot).reasons.map((r, i) => (
               <li key={i} className={`text-sm flex items-start gap-2 ${r.type === "negative" ? "text-score-red" : r.type === "positive" ? "text-score-green" : "text-muted"}`}>
-                <span>{r.type === "negative" ? "✗" : "✓"}</span>
+                {r.type === "negative" ? (
+                  <XCircle className="w-[18px] h-[18px] mt-px shrink-0" strokeWidth={2} />
+                ) : (
+                  <CheckCircle2 className="w-[18px] h-[18px] mt-px shrink-0" strokeWidth={2} />
+                )}
                 <span>{r.text}</span>
               </li>
             ))}

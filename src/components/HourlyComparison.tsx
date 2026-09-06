@@ -1,4 +1,5 @@
-import { BAND_BAR_CLASS, BAND_META } from "@/lib/bandLabels";
+import { BAND_BAR_CLASS } from "@/lib/bandLabels";
+import { BandDot } from "@/components/ui/BandDot";
 import { formatHourLabel } from "@/lib/time";
 import type { HourlyScore } from "@/lib/types";
 
@@ -8,7 +9,6 @@ export function HourlyComparison({ hourly, highlightTime }: { hourly: HourlyScor
       <h3 className="text-sm font-semibold text-muted mb-3 uppercase tracking-wide">Comparación por hora</h3>
       <div className="flex flex-col divide-y divide-border">
         {hourly.map((h) => {
-          const meta = BAND_META[h.band];
           const isHighlight = h.time === highlightTime;
           return (
             <div
@@ -20,7 +20,7 @@ export function HourlyComparison({ hourly, highlightTime }: { hourly: HourlyScor
                 <div className={`h-full ${BAND_BAR_CLASS[h.band]}`} style={{ width: `${h.score}%` }} />
               </div>
               <span className="text-sm font-semibold w-10 text-right">{h.score}</span>
-              <span className="ml-2">{meta.emoji}</span>
+              <BandDot band={h.band} className="ml-2" />
             </div>
           );
         })}

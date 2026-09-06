@@ -6,9 +6,11 @@ import { useRouter } from "next/navigation";
 import { ACTIVITIES, CATEGORY_LABEL, CATEGORY_ORDER, SKILL_LEVELS } from "@/lib/activities";
 import { Chip } from "@/components/ui/Chip";
 import { WizardProgress } from "@/components/ui/WizardProgress";
+import { ActivityBadge } from "@/components/ui/ActivityBadge";
 import { LocationSearch } from "@/components/LocationSearch";
 import { HeroIllustration } from "@/components/HeroIllustration";
 import { track } from "@/lib/analytics";
+import { MapPin, ArrowRight } from "lucide-react";
 import type { ActivityId, Location, SkillLevel, WhenMode } from "@/lib/types";
 import { maxForecastDateISO, todayISO } from "@/lib/time";
 
@@ -79,13 +81,15 @@ export default function Home() {
           className="mb-6 rounded-2xl border border-accent/30 bg-accent/10 px-4 py-3.5 flex items-center justify-between gap-3 hover:bg-accent/15 transition-colors"
         >
           <span className="flex items-center gap-2.5">
-            <span className="text-xl">📍</span>
+            <span className="flex items-center justify-center w-9 h-9 rounded-full bg-accent/15 text-accent shrink-0">
+              <MapPin className="w-[18px] h-[18px]" strokeWidth={2.25} />
+            </span>
             <span>
               <span className="block text-sm font-semibold">Usar mi ubicación</span>
               <span className="block text-xs text-muted">Lo mejor cerca de ti, ahora mismo</span>
             </span>
           </span>
-          <span className="text-accent text-sm">→</span>
+          <ArrowRight className="w-4 h-4 text-accent shrink-0" strokeWidth={2.25} />
         </Link>
       )}
 
@@ -102,7 +106,7 @@ export default function Home() {
                   <div className="grid grid-cols-2 gap-2">
                     {ACTIVITIES.filter((a) => a.category === cat).map((a) => (
                       <Chip key={a.id} selected={activity === a.id} onClick={() => selectActivity(a.id)} className="py-3">
-                        <span className="text-xl mr-2">{a.emoji}</span>
+                        <ActivityBadge emoji={a.emoji} category={a.category} size="sm" className="mr-2.5" />
                         <span className="text-sm font-medium">{a.name}</span>
                       </Chip>
                     ))}

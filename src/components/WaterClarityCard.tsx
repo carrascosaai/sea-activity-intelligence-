@@ -1,4 +1,5 @@
 import type { VisibilityInfo } from "@/lib/types";
+import { Camera } from "lucide-react";
 
 const LABEL_COLOR: Record<string, string> = {
   Excepcional: "text-score-green",
@@ -38,9 +39,10 @@ export function WaterClarityCard({ visibility, locationLabel }: { visibility: Vi
         href={webcamSearchUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center gap-1 text-xs text-accent hover:underline mt-3"
+        className="inline-flex items-center gap-1.5 text-xs text-accent hover:underline mt-3"
       >
-        📷 Buscar una webcam de la zona para comprobarlo a simple vista →
+        <Camera className="w-3.5 h-3.5" strokeWidth={2.25} /> Buscar una webcam de la zona para comprobarlo a simple
+        vista →
       </a>
     </div>
   );

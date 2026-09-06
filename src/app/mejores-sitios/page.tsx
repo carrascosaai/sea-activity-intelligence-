@@ -3,6 +3,8 @@ import Link from "next/link";
 import { getActivity } from "@/lib/activities";
 import { TOP_SPOTS } from "@/lib/topSpots";
 import { TopSpotsControls } from "@/components/TopSpotsControls";
+import { ActivityBadge } from "@/components/ui/ActivityBadge";
+import { Radio, Map as MapIcon } from "lucide-react";
 import type { ActivityId } from "@/lib/types";
 
 export const metadata: Metadata = {
@@ -44,8 +46,9 @@ export default async function MejoresSitiosPage({
       </div>
 
       <div className="rounded-2xl bg-surface-2 border border-border p-4 mb-6">
-        <p className="text-sm">
-          {activity.emoji} <span className="font-semibold">{activity.name}</span>
+        <p className="text-sm flex items-center gap-2">
+          <ActivityBadge emoji={activity.emoji} category={activity.category} size="sm" />
+          <span className="font-semibold">{activity.name}</span>
         </p>
         <p className="text-sm text-muted mt-1.5">{guide.headline}</p>
       </div>
@@ -65,13 +68,16 @@ export default async function MejoresSitiosPage({
                   {spot.locationSlug ? (
                     <Link
                       href={`/resultado?activity=${activityId}&location=${spot.locationSlug}&level=intermedio&when=now`}
-                      className="inline-flex items-center gap-1 text-xs text-accent hover:underline mt-3"
+                      className="inline-flex items-center gap-1.5 text-xs text-accent hover:underline mt-3"
                     >
-                      📡 Ver condiciones en vivo ahora →
+                      <Radio className="w-3.5 h-3.5" strokeWidth={2.25} /> Ver condiciones en vivo ahora →
                     </Link>
                   ) : (
-                    <Link href="/mapa" className="inline-flex items-center gap-1 text-xs text-accent hover:underline mt-3">
-                      🗺️ Buscar en el mapa →
+                    <Link
+                      href="/mapa"
+                      className="inline-flex items-center gap-1.5 text-xs text-accent hover:underline mt-3"
+                    >
+                      <MapIcon className="w-3.5 h-3.5" strokeWidth={2.25} /> Buscar en el mapa →
                     </Link>
                   )}
                 </div>

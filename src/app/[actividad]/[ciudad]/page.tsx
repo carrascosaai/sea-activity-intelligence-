@@ -9,6 +9,8 @@ import { findClosestHourIndex, computeBestWindow, buildHourlyScores } from "@/li
 import { currentHourMadrid, formatHourLabel, todayISO } from "@/lib/time";
 import { BAND_META } from "@/lib/bandLabels";
 import { BandPill } from "@/components/ui/ScoreBadge";
+import { BandDot } from "@/components/ui/BandDot";
+import { ActivityBadge } from "@/components/ui/ActivityBadge";
 import { SafetyNotice } from "@/components/SafetyNotice";
 import { EmptyState } from "@/components/ui/EmptyState";
 import type { ActivityId, SkillLevel } from "@/lib/types";
@@ -102,8 +104,9 @@ export default async function ActividadCiudadPage({
         <p className="text-xs uppercase tracking-wide text-muted">
           {municipality.name} · {municipality.province}
         </p>
-        <h1 className="text-2xl font-bold mt-1">
-          {activity.emoji} {activity.name} en {municipality.name}
+        <h1 className="text-2xl font-bold mt-1 flex items-center justify-center gap-2.5">
+          <ActivityBadge emoji={activity.emoji} category={activity.category} size="md" />
+          {activity.name} en {municipality.name}
         </h1>
         <p className="text-sm text-muted mt-1">
           Ahora mismo, en {municipality.beaches.length} playa{municipality.beaches.length === 1 ? "" : "s"} de la zona
@@ -159,8 +162,8 @@ export default async function ActividadCiudadPage({
                   className="flex items-center justify-between rounded-2xl border border-border bg-surface px-4 py-3 hover:border-accent/50 transition-colors"
                 >
                   <span className="font-medium">{beach.name}</span>
-                  <span className={`font-bold ${meta.textClass}`}>
-                    {meta.emoji} {r.score}/100
+                  <span className={`font-bold flex items-center gap-1.5 ${meta.textClass}`}>
+                    <BandDot band={r.band} /> {r.score}/100
                   </span>
                 </Link>
               );
@@ -176,9 +179,10 @@ export default async function ActividadCiudadPage({
             <Link
               key={a}
               href={`/${a}/${municipality.slug}`}
-              className="text-xs rounded-full border border-border px-3 py-1.5 text-muted hover:text-foreground hover:border-accent/50 transition-colors"
+              className="text-xs rounded-full border border-border pl-1.5 pr-3 py-1.5 text-muted hover:text-foreground hover:border-accent/50 transition-colors inline-flex items-center gap-1.5"
             >
-              {getActivity(a as ActivityId).emoji} {getActivity(a as ActivityId).name}
+              <ActivityBadge emoji={getActivity(a as ActivityId).emoji} category={getActivity(a as ActivityId).category} size="sm" />
+              {getActivity(a as ActivityId).name}
             </Link>
           ))}
         </div>
