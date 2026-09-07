@@ -44,6 +44,24 @@ export default function PrivacidadPage() {
         OpenStreetMap.
       </p>
 
+      <h2 className="text-lg font-semibold mt-8 mb-2">Google Analytics</h2>
+      <p className="mb-4">
+        La web usa Google Analytics para saber cuánta gente la visita, desde qué país o dispositivo, y
+        qué páginas se consultan más. Google Analytics instala sus propias cookies para poder distinguir
+        visitas de un mismo navegador entre sesiones. No cruzamos esos datos con tu identificador local
+        ni los usamos para identificarte personalmente; solo se consultan de forma agregada para
+        entender el uso general del sitio. Puedes leer cómo trata Google esta información en su{" "}
+        <a
+          href="https://policies.google.com/privacy"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline"
+        >
+          política de privacidad
+        </a>
+        , y bloquear estas cookies en cualquier momento desde los ajustes de tu navegador.
+      </p>
+
       <h2 className="text-lg font-semibold mt-8 mb-2">Tus opciones</h2>
       <p className="mb-4">
         Puedes borrar el identificador local en cualquier momento desde los ajustes de privacidad de
