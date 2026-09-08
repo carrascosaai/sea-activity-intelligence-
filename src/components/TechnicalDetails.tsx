@@ -40,7 +40,16 @@ export function TechnicalDetails({ snapshot }: { snapshot: ConditionSnapshot }) 
           label="Oleaje"
           value={`${snapshot.waveHeightM.toFixed(1)} m${waveDir ? ` · ${waveDir} (${Math.round(snapshot.waveDirectionDeg!)}º)` : ""}`}
         />
-        <Row label="Periodo de ola" value={`${snapshot.wavePeriodS.toFixed(1)} s`} />
+        <Row label="Periodo de ola (combinado)" value={`${snapshot.wavePeriodS.toFixed(1)} s`} />
+        {snapshot.swellWaveHeightM != null && (
+          <Row label="Mar de fondo (swell)" value={`${snapshot.swellWaveHeightM.toFixed(1)} m`} />
+        )}
+        {snapshot.swellWavePeriodS != null && (
+          <Row label="Periodo del swell" value={`${snapshot.swellWavePeriodS.toFixed(1)} s`} />
+        )}
+        {snapshot.windWaveHeightM != null && (
+          <Row label="Mar de viento (chop)" value={`${snapshot.windWaveHeightM.toFixed(1)} m`} />
+        )}
         <Row label="Temp. del agua" value={`${snapshot.waterTempC.toFixed(1)} ºC`} />
         <Row label="Temp. ambiente" value={`${snapshot.airTempC.toFixed(1)} ºC`} />
         <Row

@@ -3,12 +3,55 @@ import { haversineKm } from "./geo";
 import type { Location } from "./types";
 
 /**
+ * OpenStreetMap etiqueta `natural=beach` tanto para playas de mar como para
+ * "playas" fluviales/de pantano en zonas de baño de interior — el propio
+ * dataset generado (ver scripts/generate-beaches.mjs) las trae todas
+ * mezcladas. Esta web es de mar: Open-Meteo Marine no tiene oleaje en
+ * ningún río o pantano (nunca lo inventa, devuelve `null`), así que esas
+ * ubicaciones nunca podrían dar un resultado real — antes de este filtro
+ * aparecían en el buscador y llevaban a un callejón sin salida. Se filtran
+ * por PROVINCIA (no por comunidad autónoma, porque comunidades como País
+ * Vasco, Cataluña o Andalucía mezclan provincias de costa y de interior) —
+ * lista de las 22 provincias españolas sin costa real, verificada a mano
+ * contra el propio dataset (ver detalle en README, "Cobertura nacional de
+ * playas").
+ */
+const LANDLOCKED_PROVINCES = new Set([
+  "Albacete",
+  "Badajoz",
+  "Burgos",
+  "Cuenca",
+  "Cáceres",
+  "Córdoba",
+  "Guadalajara",
+  "La Rioja",
+  "León",
+  "Lleida",
+  "Madrid",
+  "Navarra",
+  "Ourense",
+  "Palencia",
+  "Salamanca",
+  "Segovia",
+  "Teruel",
+  "Toledo",
+  "Valladolid",
+  "Zamora",
+  "Zaragoza",
+  "Ávila",
+]);
+
+/**
  * Cobertura nacional: ~3.600 playas de España generadas desde datos reales de
  * OpenStreetMap (natural=beach) — ver scripts/generate-beaches.mjs. Se genera
  * en build-time, no se consulta Overpass en producción (ver README,
- * "Escalabilidad").
+ * "Escalabilidad"). Excluye las ~92 de provincias de interior (ver
+ * LANDLOCKED_PROVINCES arriba) — siguen en beaches.json por si algún día
+ * hace falta ese dato, pero nunca deberían llegar a un usuario de esta web.
  */
-export const LOCATIONS: Location[] = beachesData as Location[];
+export const LOCATIONS: Location[] = (beachesData as Location[]).filter(
+  (l) => !LANDLOCKED_PROVINCES.has(l.province)
+);
 
 const BY_SLUG = new Map(LOCATIONS.map((l) => [l.slug, l]));
 

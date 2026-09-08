@@ -112,6 +112,7 @@ export function buildActivityRules(profile: ActivityProfile): Record<SkillLevel,
       wave: scaleWave(profile.wave, f),
       period: scalePeriod(profile.period, f),
       comfort: scaleComfort(profile, f),
+      useSwellData: profile.useSwellData ?? false,
     };
   }
   return result;

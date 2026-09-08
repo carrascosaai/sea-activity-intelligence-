@@ -26,6 +26,13 @@ export function scoreCondition(
   let score = 100;
   let hardNoGo = false;
 
+  // Deportes de deslizamiento en ola puntúan sobre el swell (mar de fondo
+  // organizado), no sobre el estado del mar combinado — ver ruleTypes.ts
+  // (useSwellData) y providers/openMeteoMarine.ts. Si el swell no está
+  // diferenciado en ese instante (null), cae al dato combinado.
+  const effectiveWaveHeightM = rules.useSwellData ? (snapshot.swellWaveHeightM ?? snapshot.waveHeightM) : snapshot.waveHeightM;
+  const effectiveWavePeriodS = rules.useSwellData ? (snapshot.swellWavePeriodS ?? snapshot.wavePeriodS) : snapshot.wavePeriodS;
+
   // --- Viento ---
   let windPenalty: number;
   if (rules.wind.kind === "linear") {
@@ -55,47 +62,47 @@ export function scoreCondition(
   // --- Oleaje ---
   let wavePenalty: number;
   if (rules.wave.kind === "linear") {
-    wavePenalty = penaltyLinear(snapshot.waveHeightM, rules.wave.goodM, rules.wave.badM, rules.wave.maxPenalty);
-    if (snapshot.waveHeightM >= rules.wave.noGoM) hardNoGo = true;
+    wavePenalty = penaltyLinear(effectiveWaveHeightM, rules.wave.goodM, rules.wave.badM, rules.wave.maxPenalty);
+    if (effectiveWaveHeightM >= rules.wave.noGoM) hardNoGo = true;
     if (wavePenalty <= 2) reasons.push({ type: "positive", text: "Oleaje pequeño" });
     else if (wavePenalty >= rules.wave.maxPenalty * 0.5)
-      reasons.push({ type: "negative", text: `Oleaje elevado para tu nivel (${snapshot.waveHeightM.toFixed(1)} m)` });
+      reasons.push({ type: "negative", text: `Oleaje elevado para tu nivel (${effectiveWaveHeightM.toFixed(1)} m)` });
   } else {
     wavePenalty = penaltyRange(
-      snapshot.waveHeightM,
+      effectiveWaveHeightM,
       rules.wave.idealMinM,
       rules.wave.idealMaxM,
       rules.wave.hardMinM,
       rules.wave.hardMaxM,
       rules.wave.maxPenalty
     );
-    if (snapshot.waveHeightM >= rules.wave.noGoM) hardNoGo = true;
+    if (effectiveWaveHeightM >= rules.wave.noGoM) hardNoGo = true;
     if (wavePenalty <= 2) reasons.push({ type: "positive", text: "Tamaño de ola en tu rango ideal" });
-    else if (snapshot.waveHeightM < rules.wave.idealMinM)
+    else if (effectiveWaveHeightM < rules.wave.idealMinM)
       reasons.push({ type: "negative", text: "Poco oleaje para esta actividad" });
     else if (wavePenalty >= rules.wave.maxPenalty * 0.5)
-      reasons.push({ type: "negative", text: `Oleaje demasiado grande para tu nivel (${snapshot.waveHeightM.toFixed(1)} m)` });
+      reasons.push({ type: "negative", text: `Oleaje demasiado grande para tu nivel (${effectiveWaveHeightM.toFixed(1)} m)` });
   }
   score -= wavePenalty;
 
   // --- Periodo --- (ver ruleTypes.ts: el sentido de "mejor" cambia según el deporte)
   let periodPenalty: number;
   if (rules.period.kind === "shorter-is-worse") {
-    periodPenalty = penaltyLinearInverse(snapshot.wavePeriodS, rules.period.goodS, rules.period.badS, rules.period.maxPenalty);
+    periodPenalty = penaltyLinearInverse(effectiveWavePeriodS, rules.period.goodS, rules.period.badS, rules.period.maxPenalty);
     if (rules.period.maxPenalty > 0 && periodPenalty >= rules.period.maxPenalty * 0.6) {
-      reasons.push({ type: "negative", text: `Periodo corto (${snapshot.wavePeriodS.toFixed(0)} s): oleaje de viento, más incómodo/inestable` });
+      reasons.push({ type: "negative", text: `Periodo corto (${effectiveWavePeriodS.toFixed(0)} s): oleaje de viento, más incómodo/inestable` });
     }
   } else if (rules.period.kind === "longer-is-worse") {
-    periodPenalty = penaltyLinear(snapshot.wavePeriodS, rules.period.goodS, rules.period.badS, rules.period.maxPenalty);
+    periodPenalty = penaltyLinear(effectiveWavePeriodS, rules.period.goodS, rules.period.badS, rules.period.maxPenalty);
     if (rules.period.maxPenalty > 0 && periodPenalty >= rules.period.maxPenalty * 0.6) {
       reasons.push({
         type: "negative",
-        text: `Periodo largo (${snapshot.wavePeriodS.toFixed(0)} s): más energía en la rotura, riesgo de corrientes de retorno`,
+        text: `Periodo largo (${effectiveWavePeriodS.toFixed(0)} s): más energía en la rotura, riesgo de corrientes de retorno`,
       });
     }
   } else {
     periodPenalty = penaltyRange(
-      snapshot.wavePeriodS,
+      effectiveWavePeriodS,
       rules.period.idealMinS,
       rules.period.idealMaxS,
       rules.period.hardMinS,
@@ -104,10 +111,10 @@ export function scoreCondition(
     );
     if (periodPenalty <= 2) {
       reasons.push({ type: "positive", text: "Periodo de ola con buena calidad (mar de fondo organizado)" });
-    } else if (snapshot.wavePeriodS < rules.period.idealMinS) {
+    } else if (effectiveWavePeriodS < rules.period.idealMinS) {
       reasons.push({
         type: "negative",
-        text: `Periodo corto (${snapshot.wavePeriodS.toFixed(0)} s): oleaje de viento, olas desorganizadas y con poca fuerza`,
+        text: `Periodo corto (${effectiveWavePeriodS.toFixed(0)} s): oleaje de viento, olas desorganizadas y con poca fuerza`,
       });
     }
   }

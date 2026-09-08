@@ -162,6 +162,24 @@ real que del medio, así que los umbrales de `profiles.ts` (p. ej. 10-14 s ideal
 surf) se han calibrado asumiendo que es periodo de pico/dominante, la convención
 habitual en previsión de surf (Surfline, SurfSpotGuide).
 
+**Mejora encontrada durante esta investigación (sep. 2026):** buscando un modelo
+regional de mayor resolución para España (AROME/ICON-D2 no cubren la península, solo
+Europa central), until que Open-Meteo Marine sí separa el estado del mar combinado en
+sus dos componentes físicos reales: `swell_wave_*` (mar de fondo — olas organizadas de
+origen lejano, con `swell_wave_peak_period`, el periodo de PICO real, no la media) y
+`wind_wave_*` (mar de viento/chop local). Es justo la distinción oceanográfica en la
+que se basó la recalibración del scoring, pero el motor solo usaba el dato combinado.
+Ahora surf y bodyboard (`useSwellData: true` en `profiles.ts`) puntúan sobre el swell,
+no sobre la mezcla — verificado en directo en Zurriola (San Sebastián): el mismo
+instante daba periodo combinado 9,0 s ("periodo corto", oleaje de viento) pero periodo
+de pico del swell real 11,15 s (dentro del rango ideal 10-14 s) — el score pasaba de 92
+a 100 con el motivo correcto. Si el swell no está diferenciado en ese instante (mar
+totalmente plano), cae al dato combinado, nunca se inventa. El indicador de corrientes
+de retorno (`ripCurrentRisk.ts`) usa el mismo swell por el mismo motivo — es lo que
+dice la propia NOAA. `ConditionsGrid` muestra "(swell)" junto a oleaje/periodo cuando
+la actividad usa este dato, para que la cabecera y el "¿por qué?" nunca muestren
+números distintos.
+
 ## Cobertura nacional de playas
 
 `src/data/beaches.json` se genera con `node scripts/generate-beaches.mjs` a partir de
@@ -186,6 +204,16 @@ Ayamonte, Ribadeo, La Manga) sin anomalías.
 la búsqueda de ubicaciones pasa por `/api/locations/search` y los scores del mapa por
 `/api/map-scores`, ambos server-side. Así el bundle del navegador no crece con las
 ~3.600 playas — ver "Escalabilidad" más abajo.
+
+**92 "playas" de interior excluidas del buscador (sep. 2026):** `natural=beach` en
+OpenStreetMap también etiqueta playas fluviales y de pantano en zonas sin costa —
+Open-Meteo Marine nunca tiene oleaje ahí (siempre `null`, nunca lo inventa), así que
+antes de este filtro llevaban a un callejón sin salida. `lib/locations.ts` filtra por
+las 22 provincias españolas sin costa real (Madrid, Zaragoza, Toledo, Zamora...) —
+por PROVINCIA y no por comunidad autónoma, porque comunidades como País Vasco,
+Cataluña o Andalucía mezclan provincias de costa y de interior (Álava, Lleida,
+Córdoba). Siguen en `beaches.json` (el archivo generado no se toca) pero nunca llegan
+a un usuario de esta web.
 
 ## Claridad del agua (buceo, snorkel, apnea)
 

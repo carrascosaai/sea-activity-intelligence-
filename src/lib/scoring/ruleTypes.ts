@@ -102,13 +102,24 @@ export interface ActivityLevelRules {
   wave: WaveRule;
   period: PeriodRule;
   comfort: ComfortRule;
+  useSwellData: boolean;
 }
 
-/** Perfil base (referencia: nivel principiante) del que se derivan los 3 niveles. */
+/**
+ * Perfil base (referencia: nivel principiante) del que se derivan los 3 niveles.
+ *
+ * useSwellData: si es true, oleaje/periodo se leen del componente swell/mar
+ * de fondo (snapshot.swellWaveHeightM/swellWavePeriodS) en vez del estado
+ * del mar combinado — para deportes de deslizamiento en ola (surf,
+ * bodyboard), donde lo que hace una buena ola es el swell, no el chop local
+ * mezclado. Si el swell no está disponible en ese instante (null), cae al
+ * dato combinado — nunca se inventa un valor. Ver providers/openMeteoMarine.ts.
+ */
 export interface ActivityProfile {
   wind: WindRule;
   wave: WaveRule;
   period: PeriodRule;
   waterTempMaxPenalty: number;
   rainMaxPenalty: number;
+  useSwellData?: boolean;
 }

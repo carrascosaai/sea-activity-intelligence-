@@ -1,17 +1,24 @@
-import type { ConditionSnapshot } from "@/lib/types";
+import type { ActivityId, ConditionSnapshot } from "@/lib/types";
 import { AirTempIcon, PeriodIcon, RainIcon, WaterTempIcon, WaveIcon, WindIcon } from "@/components/ui/WeatherIcons";
 import { namedWind } from "@/lib/weatherFormat";
+import { ACTIVITY_PROFILES } from "@/lib/scoring/profiles";
 
-export function ConditionsGrid({ snapshot }: { snapshot: ConditionSnapshot }) {
+export function ConditionsGrid({ snapshot, activityId }: { snapshot: ConditionSnapshot; activityId: ActivityId }) {
   const wind = namedWind(snapshot.windDirectionDeg);
+  // Mismo criterio que el motor de scoring (ver engine.ts): en surf/
+  // bodyboard lo que decide es el swell, así que aquí arriba se muestra el
+  // mismo número que luego explica el "¿por qué?" — nunca uno distinto.
+  const useSwell = ACTIVITY_PROFILES[activityId].useSwellData ?? false;
+  const waveHeightM = useSwell ? (snapshot.swellWaveHeightM ?? snapshot.waveHeightM) : snapshot.waveHeightM;
+  const wavePeriodS = useSwell ? (snapshot.swellWavePeriodS ?? snapshot.wavePeriodS) : snapshot.wavePeriodS;
   const items = [
     {
       Icon: WindIcon,
       label: "Viento",
       value: `${Math.round(snapshot.windSpeedKmh)} km/h${wind ? ` · ${wind}` : ""}`,
     },
-    { Icon: WaveIcon, label: "Oleaje", value: `${snapshot.waveHeightM.toFixed(1)} m` },
-    { Icon: PeriodIcon, label: "Periodo", value: `${Math.round(snapshot.wavePeriodS)} s` },
+    { Icon: WaveIcon, label: useSwell ? "Oleaje (swell)" : "Oleaje", value: `${waveHeightM.toFixed(1)} m` },
+    { Icon: PeriodIcon, label: useSwell ? "Periodo (swell)" : "Periodo", value: `${Math.round(wavePeriodS)} s` },
     { Icon: WaterTempIcon, label: "Agua", value: `${Math.round(snapshot.waterTempC)} ºC` },
     { Icon: AirTempIcon, label: "Ambiente", value: `${Math.round(snapshot.airTempC)} ºC` },
     { Icon: RainIcon, label: "Lluvia", value: `${Math.round(snapshot.precipitationProbabilityPct)}%` },

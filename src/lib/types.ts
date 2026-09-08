@@ -60,6 +60,18 @@ export interface MarineHourPoint {
   waveDirectionDeg: number | null;
   wavePeriodS: number | null;
   waterTempC: number | null;
+  /**
+   * Open-Meteo Marine separa el estado del mar combinado (wave_*, arriba) en
+   * sus dos componentes físicos: el mar de fondo/swell (olas organizadas de
+   * origen lejano, lo que de verdad interesa para surf/bodyboard) y el mar
+   * de viento (chop local, lo que interesa para el "picado" que afecta a
+   * kayak/remo/buceo...). No siempre están los tres — con mar totalmente
+   * plano o sin swell diferenciado, pueden venir `null`; nunca se inventan.
+   * Ver lib/scoring/profiles.ts (useSwellData) y providers/openMeteoMarine.ts.
+   */
+  swellWaveHeightM: number | null;
+  swellWavePeriodS: number | null; // periodo de pico si está disponible, si no periodo medio del swell
+  windWaveHeightM: number | null;
 }
 
 export interface TideInfo {
@@ -87,6 +99,12 @@ export interface ConditionSnapshot {
   waveHeightM: number;
   waveDirectionDeg: number | null;
   wavePeriodS: number;
+  // Componentes swell/mar de viento — null si Open-Meteo no los diferencia en
+  // ese momento (mar totalmente plano, o sin separación clara). Ver
+  // MarineHourPoint para de dónde salen.
+  swellWaveHeightM: number | null;
+  swellWavePeriodS: number | null;
+  windWaveHeightM: number | null;
   waterTempC: number;
   airTempC: number;
   precipitationProbabilityPct: number;

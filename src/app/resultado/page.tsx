@@ -192,7 +192,14 @@ export default async function ResultadoPage({
       : findClosestHourIndex(hourly, bestWindow ? hourFromISO(bestWindow.startTime) : 12);
   const headline = hourly[headlineIdx];
   const headlineMeta = BAND_META[headline.band];
-  const ripRisk = computeRipRisk(headline.snapshot.waveHeightM, headline.snapshot.wavePeriodS);
+  // El riesgo de corrientes de retorno depende del swell (mar de fondo), no
+  // del estado del mar combinado — es lo que dice la propia NOAA (ver
+  // ripCurrentRisk.ts) y ahora Open-Meteo lo diferencia. Cae al dato
+  // combinado si el swell no está disponible en ese instante.
+  const ripRisk = computeRipRisk(
+    headline.snapshot.swellWaveHeightM ?? headline.snapshot.waveHeightM,
+    headline.snapshot.swellWavePeriodS ?? headline.snapshot.wavePeriodS
+  );
 
   const crossScores = ACTIVITIES.map((a) => {
     const result = scoreCondition(a.id, level, headline.snapshot);
@@ -253,7 +260,7 @@ export default async function ResultadoPage({
           )
         )}
         <div className="w-full mt-2">
-          <ConditionsGrid snapshot={headline.snapshot} />
+          <ConditionsGrid snapshot={headline.snapshot} activityId={activityId} />
         </div>
       </div>
 

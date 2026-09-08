@@ -88,6 +88,11 @@ export const ACTIVITY_PROFILES: Record<ActivityId, ActivityProfile> = {
     period: { kind: "range", idealMinS: 10, idealMaxS: 14, hardMinS: 6, hardMaxS: 22, maxPenalty: 33 },
     waterTempMaxPenalty: 6,
     rainMaxPenalty: 10,
+    // Puntúa sobre el swell (mar de fondo), no sobre el mar combinado — lo
+    // que hace una ola buena o mala es el swell, no el chop local mezclado
+    // (verificado sep. 2026: Open-Meteo separa ambos componentes, ver
+    // providers/openMeteoMarine.ts).
+    useSwellData: true,
   },
   // Igual lógica que surf pero algo menos exigente: se puede hacer bodyboard
   // con oleaje algo más pequeño/messy que en tabla de pie. Periodo medio
@@ -99,6 +104,7 @@ export const ACTIVITY_PROFILES: Record<ActivityId, ActivityProfile> = {
     period: { kind: "range", idealMinS: 9, idealMaxS: 14, hardMinS: 5, hardMaxS: 20, maxPenalty: 25 },
     waterTempMaxPenalty: 6,
     rainMaxPenalty: 10,
+    useSwellData: true,
   },
   // Paddle surf de recreo/travesía (agua tranquila, no olas) — no es la
   // variante de surf en ola. Guías de SUP para principiantes: viento ideal
