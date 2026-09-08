@@ -2,8 +2,16 @@ import type { ActivityId, ConditionSnapshot, ScoreBand, ScoreReason, ScoreResult
 import { ACTIVITY_RULES } from "./config";
 import { clampScore, penaltyLinear, penaltyLinearInverse, penaltyRange } from "./helpers";
 
+// Umbral de "ideal" subido de 85 a 93 (sep. 2026, junto con el ajuste de
+// penaltyRange en helpers.ts): antes, CUALQUIER día dentro del rango
+// aceptable en los 3 factores (viento/oleaje/periodo) llegaba a 100 y a
+// "CONDICIONES IDEALES", indistinguible de un día realmente excepcional —
+// detectado con un caso real (webcam de Somo mostrando un día bueno pero
+// picado, con el score en 100). Ahora "ideal" queda para lo que de verdad
+// está cerca del centro de todos los rangos; un día bueno-pero-no-perfecto
+// (88-92 con el nuevo cálculo) cae en "buena", que es justo lo que es.
 function bandFromScore(score: number): ScoreBand {
-  if (score >= 85) return "ideal";
+  if (score >= 93) return "ideal";
   if (score >= 70) return "buena";
   if (score >= 50) return "aceptable";
   if (score >= 30) return "mala";
