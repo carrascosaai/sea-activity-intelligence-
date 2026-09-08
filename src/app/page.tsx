@@ -73,6 +73,12 @@ export default function Home() {
           Analizamos el viento, el oleaje y el tiempo de {ACTIVITIES.length} deportes en toda la costa española para
           decirte qué actividad es mejor, dónde y cuándo.
         </p>
+        <ul className="flex flex-wrap gap-x-4 gap-y-1 mt-3 text-xs text-muted">
+          <li>Gratis, sin límite</li>
+          <li>Sin cuenta</li>
+          <li>{ACTIVITIES.length} deportes</li>
+          <li>Toda la costa de España</li>
+        </ul>
       </header>
 
       {stepIdx === 0 && (

@@ -6,8 +6,13 @@ export function todayISO(): string {
 }
 
 export function tomorrowISO(): string {
+  return dateOffsetISO(1);
+}
+
+/** Fecha de "hoy + offsetDays" en Europe/Madrid, formato YYYY-MM-DD (offsetDays puede ser 0). */
+export function dateOffsetISO(offsetDays: number): string {
   const d = new Date();
-  d.setDate(d.getDate() + 1);
+  d.setDate(d.getDate() + offsetDays);
   return new Intl.DateTimeFormat("en-CA", { timeZone: MADRID_TZ }).format(d);
 }
 
@@ -80,4 +85,12 @@ export function formatDateLabel(dateISO: string): string {
     day: "numeric",
     month: "long",
   }).format(date);
+}
+
+/** "jue 10" — para etiquetas cortas (p. ej. DayTrend), no la fecha completa de formatDateLabel. */
+export function formatShortDayLabel(dateISO: string): string {
+  const [y, m, d] = dateISO.split("-").map(Number);
+  const date = new Date(Date.UTC(y, m - 1, d, 12));
+  const label = new Intl.DateTimeFormat("es-ES", { timeZone: MADRID_TZ, weekday: "short", day: "numeric" }).format(date);
+  return label.replace(".", "");
 }

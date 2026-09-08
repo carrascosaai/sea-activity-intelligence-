@@ -7,9 +7,11 @@ import { buildHourlyScores, computeBestWindow, findClosestHourIndex } from "@/li
 import { scoreCondition } from "@/lib/scoring/engine";
 import {
   currentHourMadrid,
+  dateOffsetISO,
   daysFromToday,
   formatDateLabel,
   formatHourLabel,
+  formatShortDayLabel,
   hourFromISO,
   isLowConfidenceDate,
   todayISO,
@@ -34,6 +36,9 @@ import { getShopRatingSummaries } from "@/lib/shopRatings";
 import { NearbyShops, type NearbyShopView } from "@/components/NearbyShops";
 import { TechnicalDetails } from "@/components/TechnicalDetails";
 import { AlertButton } from "@/components/AlertButton";
+import { DayTrend, type DayTrendItem } from "@/components/DayTrend";
+import { BeachPhoto } from "@/components/BeachPhoto";
+import beachPhotos from "@/data/beachPhotos.json";
 import { seaBasinForLocation } from "@/lib/seaBasin";
 import { FISHING_INFO } from "@/lib/fishing";
 import { piersNear } from "@/lib/piers";
@@ -119,6 +124,29 @@ export default async function ResultadoPage({
   // falla, nunca debe tumbar la página — solo se oculta esa fila.
   const tidePromise: Promise<TideInfo | null> = getTideInfo(location, dateISO).catch(() => null);
 
+  // Mejor momento de hoy/mañana/pasado — mismo cálculo que "Mejor momento
+  // hoy" (computeBestWindow), reutilizado para los 3 días en vez de solo el
+  // que se está viendo. Cada día se resuelve por separado y nunca tumba la
+  // página si falla (típico cerca del borde real de datos, ver maxForecastDateISO).
+  const dayTrendPromise: Promise<DayTrendItem[]> = Promise.all(
+    (
+      [
+        { when: "today" as const, dateISO: todayISO(), label: "Hoy" },
+        { when: "tomorrow" as const, dateISO: tomorrowISO(), label: "Mañana" },
+        { when: "date" as const, dateISO: dateOffsetISO(2), label: formatShortDayLabel(dateOffsetISO(2)) },
+      ]
+    ).map(async (day) => {
+      try {
+        const daySnapshots = await getDailySnapshots(location, day.dateISO);
+        const dayHourly = buildHourlyScores(daySnapshots, activityId, level);
+        const peak = dayHourly.reduce((best, h) => (h.score > best.score ? h : best), dayHourly[0]);
+        return { ...day, score: peak?.score ?? null, band: peak?.band ?? null };
+      } catch {
+        return { ...day, score: null, band: null };
+      }
+    })
+  );
+
   const showShops = !NO_RENTAL_ACTIVITIES.has(activityId);
   const nearbyShopsRaw = showShops ? shopsNear(location.lat, location.lon, { activityId, radiusKm: 15, limit: 5 }) : [];
 
@@ -133,13 +161,15 @@ export default async function ResultadoPage({
   let snapshots;
   let visibility: VisibilityInfo | null;
   let tide: TideInfo | null;
+  let dayTrend: DayTrendItem[];
   let shopRatings: Record<string, { avg: number; count: number }>;
   let communityReports: CommunityReportView[];
   try {
-    [snapshots, visibility, tide, shopRatings, communityReports] = await Promise.all([
+    [snapshots, visibility, tide, dayTrend, shopRatings, communityReports] = await Promise.all([
       getDailySnapshots(location, dateISO),
       visibilityPromise,
       tidePromise,
+      dayTrendPromise,
       getShopRatingSummaries(nearbyShopsRaw.map((s) => s.slug)),
       getCommunityReports(location.slug),
     ]);
@@ -225,6 +255,12 @@ export default async function ResultadoPage({
         event="recommendation_viewed"
         payload={{ activity: activityId, location: location.slug, level, when, score: headline.score }}
       />
+      {beachPhotos[location.slug as keyof typeof beachPhotos] && (
+        <BeachPhoto
+          photo={beachPhotos[location.slug as keyof typeof beachPhotos]}
+          alt={`Foto real de ${location.name}`}
+        />
+      )}
       <div className="flex items-center justify-between mb-6 pt-2">
         <Link href="/" className="text-sm text-muted hover:text-accent transition-colors">
           ← Nueva búsqueda
@@ -270,6 +306,16 @@ export default async function ResultadoPage({
           <ConditionsGrid snapshot={headline.snapshot} activityId={activityId} />
         </div>
         <AlertButton activityId={activityId} locationSlug={location.slug} level={level} />
+      </div>
+
+      <div className="mt-6">
+        <DayTrend
+          items={dayTrend}
+          activityId={activityId}
+          locationSlug={location.slug}
+          level={level}
+          activeWhen={when === "now" ? "today" : when}
+        />
       </div>
 
       <div className="mt-6">

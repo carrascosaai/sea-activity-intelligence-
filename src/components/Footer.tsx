@@ -22,6 +22,9 @@ export function Footer() {
           <Link href="/mejores-sitios" className="hover:text-foreground transition-colors">
             Mejores sitios
           </Link>
+          <Link href="/como-funciona" className="hover:text-foreground transition-colors">
+            Cómo funciona
+          </Link>
           <Link href="/privacidad" className="hover:text-foreground transition-colors">
             Privacidad
           </Link>

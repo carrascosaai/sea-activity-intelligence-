@@ -347,6 +347,39 @@ Sin esos tres pasos, el botón de alertas no aparece (sin claves VAPID) o no lle
 guardar la suscripción (sin la tabla) — degrada con honestidad, no rompe el resto de
 la web.
 
+## Diferenciación frente a la competencia (sep. 2026)
+
+Investigado quién más hace algo parecido: **4Shor** (Reino Unido/Europa, de pago) es el
+competidor real más cercano — puntúa condiciones por deporte y nivel, 2.500+
+localizaciones europeas. Le gana a esta web en una cosa que no es realista igualar sin
+infraestructura oceanográfica seria: modela la propagación de la ola desde el fondo
+marino real (batimetría de satélite a 10m), en vez de leer un punto de un modelo
+meteorológico genérico como hace esta web (y casi cualquier otra fuente gratuita).
+
+En vez de perseguir eso, se ha reforzado lo que sí es una ventaja real y sostenible:
+
+- **20 deportes frente a los 10 de 4Shor** — no cubren buceo, snorkel, apnea, pesca,
+  vela, remo, moto de agua, esquí acuático, wakeboard, flyboard ni coasteering.
+- **Gratis sin límite, sin cuenta** — 4Shor cobra a partir del tercer día de previsión.
+- **`/como-funciona`**: página pública que convierte todo el trabajo de validación
+  (comparación contra boyas reales, verificación de mareas contra la predicción
+  oficial) en algo que cualquier visitante puede leer, no solo quien mira el código —
+  4Shor dice "physics, not vibes" pero no enseña el trabajo real detrás.
+- **Tendencia de 3 días** (`DayTrend.tsx`, en cada resultado) — mismo cálculo que ya
+  existía para "mejor momento hoy" (`computeBestWindow`), reutilizado para hoy/mañana/
+  pasado mañana, para ver de un vistazo si merece esperar sin tener que cambiar de
+  página tres veces.
+- **Fotos reales de playa** (`scripts/generate-beach-photos.mjs`, Wikimedia Commons):
+  buscar por proximidad geográfica sin más devuelve basura real — se comprobó en
+  directo que sin filtrar, "Platja del Somorrostro" empareja con una foto de fuegos
+  artificiales en la Barceloneta (por la palabra catalana "platja" en el título, no por
+  el sitio). Se filtra por coincidencia de palabra completa con el nombre de la playa
+  o el municipio — mejor sin foto que con la equivocada — y solo se aceptan licencias
+  de reutilización real (CC0/CC-BY/CC-BY-SA/dominio público), con autor y enlace a la
+  fuente siempre visibles. De momento cubre las playas destacadas (`popular: true`,
+  22 en total, 10 con foto encontrada) — ampliar la cobertura es cambiar una lista en
+  el script, no una limitación de diseño.
+
 ## Escalabilidad — qué está preparado y qué falta
 
 Esto es lo más importante que hay que entender antes de anunciar "millones de clientes":
