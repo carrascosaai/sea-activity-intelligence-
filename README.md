@@ -113,6 +113,55 @@ siguen siendo un punto de partida: la pieza que falta para una validación de ve
 uso real, y para eso existe el widget de feedback (👍/👎) en cada resultado — evento
 `recommendation_feedback` en `lib/analytics.ts`, probado de extremo a extremo.
 
+## Viento, oleaje y temperatura del agua: ¿hay una fuente mejor que Open-Meteo?
+
+Investigado (sep. 2026) a raíz de una duda directa del usuario sobre si Open-Meteo está
+bien calibrado. Dos alternativas evaluadas y descartadas para uso en vivo, y una
+validación real hecha contra datos medidos:
+
+- **Puertos del Estado** (organismo público español) tiene la red de boyas más fiable
+  de la costa española — dato MEDIDO, no modelado. Pero su único acceso programático
+  documentado es OPeNDAP/THREDDS sirviendo NetCDF (mismo problema de encaje que
+  Copernicus Marine, ver sección de claridad del agua más abajo), y solo cubre ~20-30
+  puntos fijos de toda la costa — para el resto de las ~3.600 playas haría falta
+  interpolar de todos modos. Su app de consulta (portus.puertos.es) sí tiene una API
+  JSON interna real (`movil.puertos.es/simo/...`), pero es privada y no documentada
+  como servicio público — depender de ella en producción sería una integración frágil,
+  igual que la fricción que ya rechazamos con la primera versión de Bubblewrap/TWA no
+  documentada. Se ha usado solo para el ejercicio de validación de abajo, no está
+  integrada en el código.
+- **AEMET OpenData** tiene predicción marítima costera, pero por zona (p. ej. "Costa de
+  Asturias"), en boletines de fuerza Beaufort, no como serie horaria numérica por
+  coordenada exacta — no encaja con el modelo de "una predicción por playa" de la app.
+
+**Validación real hecha:** se comparó Open-Meteo con lecturas reales de boyas de
+Puertos del Estado (vía su API interna, solo para este ejercicio puntual) en las
+coordenadas exactas de la boya, mismo día y hora:
+
+| Boya real | Oleaje (altura) | Periodo | Temp. agua | Viento |
+|---|---|---|---|---|
+| Bilbao-Vizcaya (Ría de Bilbao) | 0.63 m real vs 0.68 m Open-Meteo (8% de diferencia) | 6.4 s medio / 10.0 s de pico real vs 8.8 s Open-Meteo (coherente con periodo de pico) | 22.4 vs 22.5 ºC | **11.8 km/h real vs 21.3 km/h Open-Meteo (casi el doble)** |
+| Las Palmas / Gran Canaria (costa abierta) | 1.14 vs 1.18 m (3% de diferencia) | 4.9 s medio / 7.4 s de pico real vs 6.85 s Open-Meteo | 23.9 vs 24.1 ºC | 24.5 vs 23.8 km/h (3% de diferencia) |
+
+Conclusión honesta: en costa abierta (Canarias) Open-Meteo acierta con un margen de
+error de un pocos puntos porcentuales — nada que objetar. En una ría/bahía resguardada
+(Bilbao) el viento del modelo se desvía mucho del real — un modelo regional (grid de
+varios km) no resuelve bien los efectos de viento muy locales de una geografía costera
+compleja (brisas de tierra/mar, canalización por la ría), algo que sí capta una boya
+puntual. Esto **no es un fallo del proveedor ni algo que un cambio de fuente arregle
+fácilmente** (el mismo problema de resolución afecta a cualquier modelo regional,
+incluidos los que usan Windguru/Windy — ambos se apoyan en los mismos modelos públicos
+de fondo, GFS/ICON/ECMWF); es una limitación real y conocida de la meteorología por
+modelo en general en bahías, rías y puertos, frente a costa abierta. Queda documentado
+aquí en vez de escondido, y hay una nota breve sobre esto en la sección de datos
+técnicos de cada resultado (`TechnicalDetails.tsx`).
+
+Sobre el periodo de ola: Open-Meteo no documenta si su campo `wave_period` es periodo
+medio o de pico — en ambas boyas comparadas su valor cae más cerca del periodo de pico
+real que del medio, así que los umbrales de `profiles.ts` (p. ej. 10-14 s ideal en
+surf) se han calibrado asumiendo que es periodo de pico/dominante, la convención
+habitual en previsión de surf (Surfline, SurfSpotGuide).
+
 ## Cobertura nacional de playas
 
 `src/data/beaches.json` se genera con `node scripts/generate-beaches.mjs` a partir de

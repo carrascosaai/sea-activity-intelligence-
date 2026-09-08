@@ -54,6 +54,15 @@ export function TechnicalDetails({ snapshot }: { snapshot: ConditionSnapshot }) 
         )}
         <Row label="Marea" value="No disponible — sin proveedor abierto para España" />
       </div>
+
+      <p className="text-[11px] text-muted mt-3 leading-relaxed">
+        Datos de modelo (no medidos en el sitio). Verificado contra boyas reales de
+        Puertos del Estado: en costa abierta el margen de error es de pocos puntos
+        porcentuales, pero en bahías, rías o puertos muy resguardados el viento del
+        modelo puede desviarse bastante más del real — la resolución del modelo no
+        capta bien los efectos de viento muy locales de esa geografía. Ver README del
+        proyecto para el detalle de la comparación.
+      </p>
     </div>
   );
 }

@@ -101,9 +101,15 @@ de reservas, chat con IA, comunidad/social, gamificación.
 
 ## 9. Riesgos
 
-- **Calidad de datos**: los proveedores gratuitos (Open-Meteo) pueden tener menor precisión
-  local que fuentes de pago (StormGlass, Puertos del Estado/AEMET). Mitigado por la capa de
-  abstracción `WeatherProvider`/`MarineProvider` — cambiar de proveedor no rompe el producto.
+- **Calidad de datos**: verificado (sep. 2026) contra boyas reales de Puertos del Estado —
+  en costa abierta Open-Meteo acierta con un margen de pocos puntos porcentuales; en
+  bahías/rías resguardadas (probado en Bilbao) el viento del modelo puede desviarse bastante
+  más — ver README.md, "¿Hay una fuente mejor que Open-Meteo?". No es un problema exclusivo
+  de un proveedor gratuito: Puertos del Estado y AEMET no tienen una API pública que encaje
+  sin fricción (NetCDF/OPeNDAP, cobertura de boyas muy dispersa, boletines por zona en vez de
+  serie horaria por coordenada) — mitigado igualmente por la capa de abstracción
+  `WeatherProvider`/`MarineProvider`, que permite cambiar de proveedor sin romper el producto
+  si en el futuro cambia esa situación.
 - **Responsabilidad/seguridad**: recomendar una actividad acuática tiene riesgo físico real.
   Mitigado con lenguaje no absoluto y aviso legal visible siempre (ver punto 13 del brief).
 - **Reglas de scoring arbitrarias al inicio**: sin datos de uso real, los pesos son estimaciones
