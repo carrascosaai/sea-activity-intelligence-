@@ -30,7 +30,7 @@ export function ActivityRanking({
             >
               <span className="flex items-center gap-3">
                 <RankBadge index={i} />
-                <ActivityBadge activityId={r.activity} category={getActivity(r.activity).category} size="sm" />
+                <ActivityBadge emoji={r.emoji} category={getActivity(r.activity).category} size="sm" />
                 <span className="font-medium">{r.name}</span>
               </span>
               <span className={`font-bold ${BAND_META[r.band].textClass}`}>{r.score}/100</span>
@@ -47,7 +47,7 @@ export function ActivityRanking({
             {notRecommended.map((r) => (
               <div key={r.activity} className="flex items-center justify-between rounded-xl border border-border bg-surface/50 px-4 py-3 opacity-70">
                 <span className="flex items-center gap-3 font-medium">
-                  <ActivityBadge activityId={r.activity} category={getActivity(r.activity).category} size="sm" />
+                  <ActivityBadge emoji={r.emoji} category={getActivity(r.activity).category} size="sm" />
                   {r.name}
                 </span>
                 <span className={`font-bold ${BAND_META[r.band].textClass}`}>{r.score}/100</span>

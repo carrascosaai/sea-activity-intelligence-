@@ -9,7 +9,7 @@ import { RankBadge } from "@/components/ui/RankBadge";
 import { BAND_META } from "@/lib/bandLabels";
 import { ACTIVITIES, SKILL_LEVELS } from "@/lib/activities";
 import { track } from "@/lib/analytics";
-import type { ActivityCategory, ActivityId, ScoreBand, SkillLevel } from "@/lib/types";
+import type { ActivityCategory, ScoreBand, SkillLevel } from "@/lib/types";
 import { MapPin } from "lucide-react";
 
 interface NearbyResult {
@@ -159,7 +159,7 @@ export function NearMeFinder() {
                     <div className="flex items-center justify-between">
                       <span className="flex items-center gap-2.5">
                         <RankBadge index={i} />
-                        <ActivityBadge activityId={r.activity as ActivityId} category={act.category} size="sm" />
+                        <ActivityBadge emoji={act.emoji} category={act.category} size="sm" />
                         <span className="font-medium">{act.name}</span>
                       </span>
                       <span className={`font-bold ${meta.textClass}`}>{r.score}/100</span>

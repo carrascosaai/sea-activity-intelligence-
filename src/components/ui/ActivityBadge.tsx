@@ -1,50 +1,43 @@
-import type { ActivityCategory, ActivityId } from "@/lib/types";
-import { ACTIVITY_ICONS } from "@/components/ui/ActivityIcons";
+import type { ActivityCategory } from "@/lib/types";
 
-// Antes el emoji de cada deporte iba suelto sobre el fondo — funcional,
-// pero se veía distinto según el ordenador/SO y a "prototipo hecho con
-// IA" según feedback directo. Un chip circular con tinte por categoría +
-// icono propio (ver ActivityIcons.tsx) da el mismo golpe de vista visual
-// pero con trazo consistente en todas partes, no la lotería del emoji del
-// sistema — sin perder la distinción real entre 20 deportes (un set de
-// iconos genérico como Lucide no tiene ni surfboard ni kayak).
+// Vuelto al emoji del sistema (sep. 2026) tras feedback directo: probé tres
+// rondas de icono propio (ActivityIcons.tsx, aún en el repo por si se
+// retoma) y las tres se rechazaron por ilegibles al tamaño real del badge
+// (14-28px) — "no se ve que deporte es cada uno". El emoji, aunque cambia
+// de aspecto según el SO, sí se reconoce a ese tamaño porque cada sistema
+// operativo ya lo ha optimizado para eso.
 const CATEGORY_TINT: Record<ActivityCategory, string> = {
-  tabla: "bg-accent/15 ring-accent/30 text-accent",
-  "remo-vela": "bg-accent-2/15 ring-accent-2/30 text-accent-2",
-  submarinismo: "bg-score-green/15 ring-score-green/30 text-score-green",
-  motor: "bg-score-orange/15 ring-score-orange/30 text-score-orange",
-  otros: "bg-score-amber/15 ring-score-amber/30 text-score-amber",
+  tabla: "bg-accent/15 ring-accent/30",
+  "remo-vela": "bg-accent-2/15 ring-accent-2/30",
+  submarinismo: "bg-score-green/15 ring-score-green/30",
+  motor: "bg-score-orange/15 ring-score-orange/30",
+  otros: "bg-score-amber/15 ring-score-amber/30",
 };
 
 const SIZE: Record<"sm" | "md" | "lg", string> = {
-  sm: "w-7 h-7",
-  md: "w-9 h-9",
-  lg: "w-14 h-14",
-};
-
-const ICON_SIZE: Record<"sm" | "md" | "lg", string> = {
-  sm: "w-[14px] h-[14px]",
-  md: "w-[18px] h-[18px]",
-  lg: "w-7 h-7",
+  sm: "w-7 h-7 text-sm",
+  md: "w-9 h-9 text-base",
+  lg: "w-14 h-14 text-3xl",
 };
 
 export function ActivityBadge({
-  activityId,
+  emoji,
   category,
   size = "md",
   className = "",
 }: {
-  activityId: ActivityId;
+  emoji: string;
   category: ActivityCategory;
   size?: "sm" | "md" | "lg";
   className?: string;
 }) {
-  const Icon = ACTIVITY_ICONS[activityId];
   return (
     <span
       className={`inline-flex items-center justify-center shrink-0 rounded-full ring-1 ${CATEGORY_TINT[category]} ${SIZE[size]} ${className}`}
     >
-      <Icon className={ICON_SIZE[size]} />
+      <span aria-hidden className="leading-none">
+        {emoji}
+      </span>
     </span>
   );
 }
