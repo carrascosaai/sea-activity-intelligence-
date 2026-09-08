@@ -22,10 +22,18 @@
   /* Pila de fuentes nativas del sistema — nunca depende de una red externa
      (Google Fonts) que pueda fallar o estar bloqueada en el entorno de
      despliegue. Cada SO usa su propia tipografía del sistema, ya optimizada
-     para pantalla: San Francisco (Apple), Segoe UI (Windows), Roboto (Android). */
+     para pantalla: San Francisco (Apple), Segoe UI (Windows), Roboto (Android).
+     Las fuentes de emoji EN COLOR van primero a propósito, no al final: en
+     Windows, "Segoe UI" ya trae versiones en blanco y negro de muchos emoji
+     (el juego de símbolos Segoe UI Symbol), así que si va antes en la lista
+     el navegador la usa para el emoji y nunca llega a "Segoe UI Emoji" — el
+     emoji sale como icono plano monocromo en vez de a todo color. Poniendo
+     las fuentes de emoji primero no afecta al texto normal (no tienen
+     glifos para letras latinas, así que el navegador sigue cayendo al
+     siguiente de la lista para eso). */
   --font-system:
-    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji";
+    "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
 }
 
 @theme inline {
