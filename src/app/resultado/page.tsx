@@ -150,11 +150,18 @@ export default async function ResultadoPage({
   }
 
   if (snapshots.length === 0) {
+    // No confundir con "la fecha está fuera de rango": el selector de fecha
+    // ya limita a maxForecastDateISO() (lib/time.ts), dentro del rango real
+    // de datos, así que casi nunca es eso. La causa real casi siempre es que
+    // esta ubicación no tiene cobertura del proveedor marino — p. ej. una
+    // "playa" fluvial o de pantano (el dataset viene de OpenStreetMap
+    // natural=beach, que incluye esas) para la que Open-Meteo Marine no
+    // tiene ningún dato en ninguna fecha, no solo en esta.
     return (
       <EmptyState
-        icon="🗓️"
-        title="Para esa fecha, el modelo de oleaje todavía no tiene datos."
-        description={`El máximo real son unos 14 días vista. Prueba con una fecha más cercana a ${location.name}.`}
+        icon="🌊"
+        title="No hay datos de oleaje para esta ubicación."
+        description={`Esta web se basa en datos del mar. Si ${location.name} es una zona de baño fluvial o de pantano (no de costa), no tenemos cobertura ahí. Si es una playa de mar, puede ser un fallo puntual del proveedor — prueba de nuevo en unos minutos.`}
         actionHref="/"
         actionLabel="Volver al inicio"
       />
