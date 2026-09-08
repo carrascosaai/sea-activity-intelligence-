@@ -133,7 +133,11 @@ Ver README.md "Escalabilidad" para el detalle de qué falta y por qué.
       en un pequeño radio — ver README.md "Claridad del agua". Si en el futuro
       Copernicus ofrece un endpoint HTTP simple sin cuenta, reconsiderar por resolución
       (100m vs 2km).
-- [ ] Favoritos, alertas de "mejor ventana" (premium), histórico, `businesses`/`booking_links` reales
+- [x] Alertas de "mejor ventana" — notificaciones Web Push, sin cuenta (sep. 2026).
+      Sorteado el límite de cron diario de Vercel Hobby con un workflow de GitHub
+      Actions gratis cada 20 min — ver README.md "Alertas". El mismo truco podría
+      aplicarse al punto de arriba (caché más frecuente) si hiciera falta.
+- [ ] Favoritos, histórico, `businesses`/`booking_links` reales
 
 ## Explícitamente fuera de alcance (no construir sin decisión explícita)
 

@@ -1,0 +1,22 @@
+name: Check alerts
+
+# Vercel Hobby solo permite cron una vez al día (ver README.md, "Alertas") —
+# muy poco para "avísame cuando se abran buenas condiciones", así que este
+# chequeo periódico lo dispara GitHub Actions en su lugar, gratis, en vez de
+# necesitar un plan de pago de Vercel para algo tan simple como una petición
+# HTTP cada rato. Requiere dos secrets del repo (Settings → Secrets and
+# variables → Actions): SITE_URL (la URL de producción) y CRON_SECRET (el
+# mismo valor que la variable de entorno CRON_SECRET en Vercel).
+on:
+  schedule:
+    - cron: "*/20 * * * *"
+  workflow_dispatch: {}
+
+jobs:
+  check-alerts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Llamar a /api/cron/check-alerts
+        run: |
+          curl -sf -X GET "${{ secrets.SITE_URL }}/api/cron/check-alerts" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}"

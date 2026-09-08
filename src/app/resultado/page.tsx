@@ -33,6 +33,7 @@ import { shopsNear, googleMapsSearchUrl } from "@/lib/shops";
 import { getShopRatingSummaries } from "@/lib/shopRatings";
 import { NearbyShops, type NearbyShopView } from "@/components/NearbyShops";
 import { TechnicalDetails } from "@/components/TechnicalDetails";
+import { AlertButton } from "@/components/AlertButton";
 import { seaBasinForLocation } from "@/lib/seaBasin";
 import { FISHING_INFO } from "@/lib/fishing";
 import { piersNear } from "@/lib/piers";
@@ -268,6 +269,7 @@ export default async function ResultadoPage({
         <div className="w-full mt-2">
           <ConditionsGrid snapshot={headline.snapshot} activityId={activityId} />
         </div>
+        <AlertButton activityId={activityId} locationSlug={location.slug} level={level} />
       </div>
 
       <div className="mt-6">

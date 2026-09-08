@@ -206,6 +206,27 @@ insert into activities (id, name, emoji) values
   ('natacion-aguas-abiertas', 'Natación en aguas abiertas', '🏊')
 on conflict (id) do nothing;
 
+-- Alertas ("avísame cuando haya buenas condiciones") — notificaciones Web
+-- Push, sin cuenta ni email: la suscripción del navegador (endpoint/keys)
+-- ES el identificador, igual de anónima que session_id en favorites. Ver
+-- lib/alerts.ts, api/alerts/route.ts y api/cron/check-alerts/route.ts.
+-- was_good/last_notified_at existen para notificar solo al ENTRAR en buenas
+-- condiciones (ideal/buena), no cada vez que se revisa mientras se mantienen
+-- — sin eso, cada chequeo periódico repetiría el aviso.
+create table if not exists alert_subscriptions (
+  id uuid primary key default gen_random_uuid(),
+  endpoint text not null unique,
+  p256dh text not null,
+  auth text not null,
+  location_slug text not null references locations(slug),
+  activity_id text not null references activities(id),
+  skill_level text not null check (skill_level in ('principiante', 'intermedio', 'avanzado')),
+  was_good boolean not null default false,
+  last_notified_at timestamptz,
+  created_at timestamptz not null default now()
+);
+create index if not exists idx_alert_subscriptions_location_activity on alert_subscriptions (location_slug, activity_id);
+
 -- Las ~3.600 playas de España (src/data/beaches.json, generado por
 -- scripts/generate-beaches.mjs desde OpenStreetMap) se cargan con
 -- `node scripts/seed-supabase.mjs` una vez configuradas SUPABASE_URL y

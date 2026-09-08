@@ -311,6 +311,42 @@ repartidas por toda España: pasó de fallar en la que se sabía problemática a
 para las que Open-Meteo Marine tampoco tiene oleaje; no es un fallo, es que
 correctamente no hay mar cerca).
 
+## Alertas ("avísame cuando haya buenas condiciones")
+
+Notificaciones push del navegador, sin cuenta ni email — la propia suscripción push
+(endpoint + claves de cifrado) es el identificador, tan anónima como el `session_id`
+de `favorites`. Botón en `/resultado` (`AlertButton.tsx`): pide permiso de
+notificaciones, registra `public/sw.js` (service worker mínimo, solo para recibir el
+evento `push` en segundo plano — no cachea nada ni hace la app funcionar offline) y
+suscribe con la clave pública VAPID. Se guarda en `alert_subscriptions` (Supabase).
+
+**Aviso "al entrar", no "cada vez que se revisa":** cada suscripción guarda
+`was_good` — solo se notifica cuando las condiciones pasan de no-buenas a
+ideal/buena, no en cada chequeo mientras se mantienen (si no, spam cada 20 min
+durante toda una buena tarde de viento).
+
+**El obstáculo real — Vercel Hobby solo permite cron una vez al día** (ver
+"Escalabilidad" más abajo): inútil para "avísame en cuanto se abra la ventana", que
+necesita revisarse a menudo. En vez de forzar un plan de pago para esto,
+`.github/workflows/check-alerts.yml` dispara `/api/cron/check-alerts` cada 20 minutos
+gratis vía GitHub Actions — es solo una petición HTTP periódica con autenticación
+(`CRON_SECRET`, la misma variable que ya protegía `/api/cron/refresh-cache`), no hace
+falta ningún plan de pago para eso.
+
+**Setup manual necesario (no lo puede hacer el asistente):**
+1. Ejecutar el bloque de `alert_subscriptions` de `db/schema.sql` en el SQL editor de
+   Supabase (el resto del esquema ya estaba aplicado).
+2. Generar un par de claves VAPID una vez (`node -e "console.log(require('web-push').generateVAPIDKeys())"`)
+   y añadir `NEXT_PUBLIC_VAPID_PUBLIC_KEY` / `VAPID_PRIVATE_KEY` como variables de
+   entorno en Vercel (Production).
+3. En el repo de GitHub → Settings → Secrets and variables → Actions, añadir
+   `SITE_URL` (la URL de producción) y `CRON_SECRET` (el mismo valor que en Vercel)
+   para que el workflow programado pueda llamar a la ruta protegida.
+
+Sin esos tres pasos, el botón de alertas no aparece (sin claves VAPID) o no llega a
+guardar la suscripción (sin la tabla) — degrada con honestidad, no rompe el resto de
+la web.
+
 ## Escalabilidad — qué está preparado y qué falta
 
 Esto es lo más importante que hay que entender antes de anunciar "millones de clientes":
