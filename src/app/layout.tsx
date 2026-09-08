@@ -64,6 +64,15 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="es" className={`h-full antialiased ${displayFont.variable}`}>
+      {/*
+        Navbar/Footer/CookieConsent se ocultan a sí mismos en /widget/* (ver
+        cada componente, usePathname) — un widget embebido en la web de un
+        negocio debe ser solo el contenido, no la cabecera/pie/banner de
+        cookies de esta web entera. Deliberadamente NO se resuelve aquí en
+        el layout de servidor (con headers()/pathname): eso obligaría a
+        renderizar TODA la web de forma dinámica en vez de estática, solo
+        para una ruta que ya se puede resolver en el cliente sin ese coste.
+      */}
       <body className="min-h-full flex flex-col">
         <Navbar />
         {children}

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Script from "next/script";
 import Link from "next/link";
 import { Cookie } from "lucide-react";
+import { useIsWidgetRoute } from "@/lib/useIsWidgetRoute";
 
 const CONSENT_KEY = "sai-analytics-consent";
 type Consent = "granted" | "denied";
@@ -18,6 +19,7 @@ type Consent = "granted" | "denied";
  * cookie ni servidor nuestro) para no volver a preguntar en cada visita.
  */
 export function CookieConsent({ gaMeasurementId }: { gaMeasurementId?: string }) {
+  const isWidgetRoute = useIsWidgetRoute();
   const [consent, setConsent] = useState<Consent | null>(null);
   const [checked, setChecked] = useState(false);
 
@@ -31,6 +33,11 @@ export function CookieConsent({ gaMeasurementId }: { gaMeasurementId?: string })
     }
     setChecked(true);
   }, []);
+
+  // Un widget embebido en la web de un negocio no debe abrir un banner de
+  // cookies propio encima de un iframe pequeño — ni tiene sentido que
+  // Analytics cuente esa vista como tráfico de esta web.
+  if (isWidgetRoute) return null;
 
   function choose(value: Consent) {
     try {

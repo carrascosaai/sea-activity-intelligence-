@@ -1,8 +1,12 @@
+"use client";
+
 import Link from "next/link";
 import { MapPin, Trophy } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
+import { useIsWidgetRoute } from "@/lib/useIsWidgetRoute";
 
 export function Navbar() {
+  if (useIsWidgetRoute()) return null;
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-md">
       <div className="max-w-5xl mx-auto px-5 py-3.5 flex items-center justify-between gap-4">

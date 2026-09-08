@@ -1,7 +1,11 @@
+"use client";
+
 import Link from "next/link";
 import { Logo } from "@/components/ui/Logo";
+import { useIsWidgetRoute } from "@/lib/useIsWidgetRoute";
 
 export function Footer() {
+  if (useIsWidgetRoute()) return null;
   return (
     <footer className="border-t border-border/60 mt-auto">
       <div className="max-w-5xl mx-auto px-5 py-6 flex flex-col gap-3 text-xs text-muted">
@@ -20,6 +24,9 @@ export function Footer() {
           </Link>
           <Link href="/privacidad" className="hover:text-foreground transition-colors">
             Privacidad
+          </Link>
+          <Link href="/para-negocios" className="hover:text-foreground transition-colors">
+            Para negocios
           </Link>
         </div>
         <p className="leading-relaxed">
