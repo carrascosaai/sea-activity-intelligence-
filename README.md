@@ -173,6 +173,26 @@ porque NOAA bloquea (403) peticiones sin cabecera `User-Agent`, y `fetch` de Nod
 manda una por defecto — quedó corregido y es la causa por la que el proveedor fija
 explícitamente ese header.
 
+**Segunda ronda (sep. 2026):** con cobertura nacional real se detectó que un número no
+trivial de playas (sobre todo calas estrechas y playas muy pegadas a tierra) devolvía "sin
+lectura" — no por nubes, sino porque el grid de 2km cae justo en un píxel contaminado por
+tierra en ese punto exacto, aunque el píxel de al lado (2-4km) tenga una lectura de mar
+abierto perfectamente válida. Verificado en directo con Playa Charco del Musgo (Tenerife):
+el píxel exacto da `null`, un cuadro de ~6x11km alrededor tiene varias lecturas reales a
+2-5km. Se reevaluó de nuevo Copernicus Marine (100m de resolución) como alternativa — sigue
+sin encajar sin infraestructura adicional (API pensada para clientes Python con cuenta
+registrada, sirve NetCDF/Zarr, no un endpoint HTTP de "dame el valor en este punto") — y los
+productos de mayor resolución de NOAA CoastWatch ("Sector" a 750m) son regionales de EE. UU.,
+no cubren España. La fuente en sí no era el problema: el problema era pedir un único píxel
+exacto. Arreglado pidiendo un pequeño cuadro alrededor del punto y usando el píxel válido
+más cercano (máx. 12km) en vez de solo el más próximo exacto, esté vacío o no — misma
+fuente, mismo endpoint gratuito, sin dependencia nueva. Verificado con 41 playas reales
+repartidas por toda España: pasó de fallar en la que se sabía problemática a acertar
+40/41 (la única que sigue sin dato es una playa fluvial de Castilla-La Mancha — de las
+~85 "playas" de interior que trae el dataset de OpenStreetMap en regiones sin costa,
+para las que Open-Meteo Marine tampoco tiene oleaje; no es un fallo, es que
+correctamente no hay mar cerca).
+
 ## Escalabilidad — qué está preparado y qué falta
 
 Esto es lo más importante que hay que entender antes de anunciar "millones de clientes":

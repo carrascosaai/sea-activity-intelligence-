@@ -126,8 +126,13 @@ Ver README.md "Escalabilidad" para el detalle de qué falta y por qué.
 - [ ] Revisar manualmente una muestra de playas por comunidad autónoma — la asignación
       de provincia (por municipio INE más cercano, con fallback a capital más cercana)
       no es point-in-polygon exacto; puede haber casos límite no detectados aún
-- [ ] Conectar un dataset de turbidez de mayor resolución (Copernicus Marine, 100m) si
-      se consigue una cuenta — el NOAA actual es 2km, más impreciso cerca de la costa
+- [x] Mejorar la fiabilidad de la claridad del agua — reevaluado Copernicus Marine
+      (sep. 2026), sigue sin encajar sin infraestructura Python/cuenta registrada; el
+      fallo real no era la fuente sino pedir un único píxel exacto (contaminado por
+      tierra en calas/costa cercana). Arreglado buscando el píxel válido más cercano
+      en un pequeño radio — ver README.md "Claridad del agua". Si en el futuro
+      Copernicus ofrece un endpoint HTTP simple sin cuenta, reconsiderar por resolución
+      (100m vs 2km).
 - [ ] Favoritos, alertas de "mejor ventana" (premium), histórico, `businesses`/`booking_links` reales
 
 ## Explícitamente fuera de alcance (no construir sin decisión explícita)
