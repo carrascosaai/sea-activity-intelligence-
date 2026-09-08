@@ -45,32 +45,39 @@
   --font-display-stack: var(--font-display), var(--font-system);
 }
 
-body {
-  background: radial-gradient(circle at 15% 0%, #142420 0%, var(--background) 55%);
-  color: var(--foreground);
-  font-family: var(--font-system);
-  min-height: 100svh;
-  position: relative;
-}
+/* En @layer base para que las utilidades de Tailwind (p. ej. "fixed" en un
+   hijo directo de <body>, como el aviso de cookies) sigan pudiendo pisar
+   estas reglas — fuera de una layer, cualquier CSS "gana" a las utilidades
+   de Tailwind sin importar la especificidad, y así "position: relative" de
+   abajo bloqueaba silenciosamente cualquier "fixed" en un hijo de body. */
+@layer base {
+  body {
+    background: radial-gradient(circle at 15% 0%, #142420 0%, var(--background) 55%);
+    color: var(--foreground);
+    font-family: var(--font-system);
+    min-height: 100svh;
+    position: relative;
+  }
 
-/* Grano sutil sobre el fondo — sin esto, un degradado plano de color sólido
-   es exactamente el aspecto "panel genérico" de cualquier plantilla. Este
-   truco (textura de ruido muy tenue) lo usan productos reales (Linear,
-   Stripe...) para que el fondo se note trabajado en vez de un color liso. */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.035;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
+  /* Grano sutil sobre el fondo — sin esto, un degradado plano de color sólido
+     es exactamente el aspecto "panel genérico" de cualquier plantilla. Este
+     truco (textura de ruido muy tenue) lo usan productos reales (Linear,
+     Stripe...) para que el fondo se note trabajado en vez de un color liso. */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
 
-body > * {
-  position: relative;
-  z-index: 1;
+  body > * {
+    position: relative;
+    z-index: 1;
+  }
 }
 
 ::selection {

@@ -48,9 +48,12 @@ export default function PrivacidadPage() {
       <p className="mb-4">
         La web usa Google Analytics para saber cuánta gente la visita, desde qué país o dispositivo, y
         qué páginas se consultan más. Google Analytics instala sus propias cookies para poder distinguir
-        visitas de un mismo navegador entre sesiones. No cruzamos esos datos con tu identificador local
-        ni los usamos para identificarte personalmente; solo se consultan de forma agregada para
-        entender el uso general del sitio. Puedes leer cómo trata Google esta información en su{" "}
+        visitas de un mismo navegador entre sesiones — por eso, la primera vez que entras, te
+        preguntamos si lo aceptas o no en un aviso al pie de la pantalla. Si rechazas, o simplemente no
+        respondes, ese script no llega a cargarse y no se instala ninguna cookie de Google. No cruzamos
+        esos datos con tu identificador local ni los usamos para identificarte personalmente; solo se
+        consultan de forma agregada para entender el uso general del sitio. Puedes leer cómo trata
+        Google esta información en su{" "}
         <a
           href="https://policies.google.com/privacy"
           target="_blank"
@@ -59,14 +62,15 @@ export default function PrivacidadPage() {
         >
           política de privacidad
         </a>
-        , y bloquear estas cookies en cualquier momento desde los ajustes de tu navegador.
+        .
       </p>
 
       <h2 className="text-lg font-semibold mt-8 mb-2">Tus opciones</h2>
       <p className="mb-4">
-        Puedes borrar el identificador local en cualquier momento desde los ajustes de privacidad de
-        tu navegador (borrar datos de navegación / almacenamiento local de este sitio). Al hacerlo, la
-        próxima visita generará uno nuevo.
+        Puedes borrar el identificador local y tu respuesta al aviso de cookies en cualquier momento
+        desde los ajustes de privacidad de tu navegador (borrar datos de navegación / almacenamiento
+        local de este sitio). Al hacerlo, la próxima visita generará un identificador nuevo y volverá a
+        aparecer el aviso de cookies.
       </p>
 
       <p className="text-muted mt-8">

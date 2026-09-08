@@ -1,12 +1,14 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
-import Script from "next/script";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { CookieConsent } from "@/components/CookieConsent";
 import "./globals.css";
 
 // Opcional, igual que Supabase: si no está configurado (p. ej. en local),
 // simplemente no se carga nada — no bloquea ni rompe el resto de la app.
+// El script de Analytics en sí solo se inserta si además el visitante da su
+// consentimiento en el banner de cookies (ver CookieConsent.tsx).
 const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
 // Tipografía de titulares propia (autoalojada, sin depender de ninguna red en
@@ -63,22 +65,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="es" className={`h-full antialiased ${displayFont.variable}`}>
       <body className="min-h-full flex flex-col">
-        {GA_MEASUREMENT_ID && (
-          <>
-            <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`} strategy="afterInteractive" />
-            <Script id="google-analytics" strategy="afterInteractive">
-              {`
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', '${GA_MEASUREMENT_ID}');
-              `}
-            </Script>
-          </>
-        )}
         <Navbar />
         {children}
         <Footer />
+        <CookieConsent gaMeasurementId={GA_MEASUREMENT_ID} />
       </body>
     </html>
   );
