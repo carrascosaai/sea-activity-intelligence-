@@ -25,7 +25,7 @@ export function CrossRecommendation({
     <div className="rounded-xl border border-accent/30 bg-accent/5 p-4">
       <div className="flex items-center justify-between text-sm">
         <span className="flex items-center gap-2">
-          <ActivityBadge emoji={current.emoji} category={current.category} size="sm" />
+          <ActivityBadge activityId={current.id} category={current.category} size="sm" />
           {current.name} — {currentScore}/100
           <BandDot band={currentBand} />
         </span>
@@ -33,7 +33,7 @@ export function CrossRecommendation({
       <p className="text-xs text-muted my-2">Pero...</p>
       <div className="flex items-center justify-between text-sm font-semibold">
         <span className="flex items-center gap-2">
-          <ActivityBadge emoji={better.emoji} category={better.category} size="sm" />
+          <ActivityBadge activityId={better.id} category={better.category} size="sm" />
           {better.name} — {betterScore}/100
           <BandDot band={betterBand} />
         </span>

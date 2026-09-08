@@ -112,7 +112,7 @@ export default function Home() {
                   <div className="grid grid-cols-2 gap-2">
                     {ACTIVITIES.filter((a) => a.category === cat).map((a) => (
                       <Chip key={a.id} selected={activity === a.id} onClick={() => selectActivity(a.id)} className="py-3">
-                        <ActivityBadge emoji={a.emoji} category={a.category} size="sm" className="mr-2.5" />
+                        <ActivityBadge activityId={a.id} category={a.category} size="sm" className="mr-2.5" />
                         <span className="text-sm font-medium">{a.name}</span>
                       </Chip>
                     ))}

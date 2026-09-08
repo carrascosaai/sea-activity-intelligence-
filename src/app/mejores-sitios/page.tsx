@@ -47,7 +47,7 @@ export default async function MejoresSitiosPage({
 
       <div className="rounded-xl bg-surface-2 border border-border p-4 mb-6">
         <p className="text-sm flex items-center gap-2">
-          <ActivityBadge emoji={activity.emoji} category={activity.category} size="sm" />
+          <ActivityBadge activityId={activity.id} category={activity.category} size="sm" />
           <span className="font-semibold">{activity.name}</span>
         </p>
         <p className="text-sm text-muted mt-1.5">{guide.headline}</p>

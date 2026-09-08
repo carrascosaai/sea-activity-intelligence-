@@ -282,7 +282,7 @@ export default async function ResultadoPage({
       <div className="text-center mb-2 animate-fade-up">
         <p className="text-xs uppercase tracking-wide text-muted">{location.name}</p>
         <h1 className="text-2xl font-bold mt-1 flex items-center justify-center gap-2.5">
-          <ActivityBadge emoji={activity.emoji} category={activity.category} size="md" />
+          <ActivityBadge activityId={activity.id} category={activity.category} size="md" />
           {activity.name}
         </h1>
         <p className="text-sm text-muted capitalize">{level}</p>

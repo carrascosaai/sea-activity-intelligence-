@@ -80,7 +80,7 @@ export function CommunityReports({
               <p className="text-sm flex items-start gap-1.5">
                 {r.activityId && ACTIVITY_BY_ID[r.activityId] && (
                   <ActivityBadge
-                    emoji={ACTIVITY_BY_ID[r.activityId].emoji}
+                    activityId={ACTIVITY_BY_ID[r.activityId].id}
                     category={ACTIVITY_BY_ID[r.activityId].category}
                     size="sm"
                     className="mt-px"

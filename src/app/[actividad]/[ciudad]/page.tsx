@@ -105,7 +105,7 @@ export default async function ActividadCiudadPage({
           {municipality.name} · {municipality.province}
         </p>
         <h1 className="text-2xl font-bold mt-1 flex items-center justify-center gap-2.5">
-          <ActivityBadge emoji={activity.emoji} category={activity.category} size="md" />
+          <ActivityBadge activityId={activity.id} category={activity.category} size="md" />
           {activity.name} en {municipality.name}
         </h1>
         <p className="text-sm text-muted mt-1">
@@ -181,7 +181,7 @@ export default async function ActividadCiudadPage({
               href={`/${a}/${municipality.slug}`}
               className="text-xs rounded-full border border-border pl-1.5 pr-3 py-1.5 text-muted hover:text-foreground hover:border-accent/50 transition-colors inline-flex items-center gap-1.5"
             >
-              <ActivityBadge emoji={getActivity(a as ActivityId).emoji} category={getActivity(a as ActivityId).category} size="sm" />
+              <ActivityBadge activityId={a as ActivityId} category={getActivity(a as ActivityId).category} size="sm" />
               {getActivity(a as ActivityId).name}
             </Link>
           ))}
