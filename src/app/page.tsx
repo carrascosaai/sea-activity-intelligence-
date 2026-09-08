@@ -8,7 +8,7 @@ import { Chip } from "@/components/ui/Chip";
 import { WizardProgress } from "@/components/ui/WizardProgress";
 import { ActivityBadge } from "@/components/ui/ActivityBadge";
 import { LocationSearch } from "@/components/LocationSearch";
-import { HeroIllustration } from "@/components/HeroIllustration";
+import { HeroPhoto } from "@/components/HeroPhoto";
 import { track } from "@/lib/analytics";
 import { MapPin, ArrowRight } from "lucide-react";
 import type { ActivityId, Location, SkillLevel, WhenMode } from "@/lib/types";
@@ -63,8 +63,8 @@ export default function Home() {
   return (
     <div className="flex-1 flex flex-col max-w-xl w-full mx-auto px-5 py-8 relative">
       {stepIdx === 0 && (
-        <div className="-mx-5 -mt-8 mb-2 overflow-hidden animate-fade-up" aria-hidden>
-          <HeroIllustration />
+        <div className="-mx-5 -mt-8 mb-2 overflow-hidden animate-fade-up">
+          <HeroPhoto />
         </div>
       )}
       <header className="mb-6 relative">

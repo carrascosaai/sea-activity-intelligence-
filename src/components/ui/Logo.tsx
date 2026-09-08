@@ -1,13 +1,13 @@
 // Logotipo real de la app (mismo diseño que el favicon, src/app/icon.svg).
-// Rediseñado (sep. 2026) tras feedback directo: la versión anterior (dos
-// olas + un sol) era genérica — el tipo de marca de agua que pondría
-// cualquier generador de apps por defecto, sin relación real con lo que
-// hace el producto. Este diseño es un solo trazo que empieza como una
-// señal/pulso de dato (la parte de "intelligence": algo que se mide) y se
-// convierte en una ola limpia (la parte de "sea") — la propia forma cuenta
-// qué hace la app, no solo "hay agua cerca". Colores fijos (no variables
-// CSS, ver BoardIllustration.tsx del mismo motivo): funciona en cualquier
-// contexto (favicon, imagen social) sin depender de que se resuelvan.
+// SEGUNDO rediseño (sep. 2026), tras feedback directo de que la primera
+// versión (un trazo de pulso convirtiéndose en ola) "es una mierda" — muy
+// blanda/orgánica, se leía como garabato abstracto sin más. Este diseño
+// es más geométrico y literal a la marca "Intelligence": un anillo de
+// radar/sonar (barrido técnico, instrumento midiendo algo) con un punto de
+// señal en el hueco, cruzado por una ola limpia de trazo grueso — "un
+// sensor escaneando el mar" en vez de una forma libre. Colores fijos (no
+// variables CSS, igual que antes): funciona en cualquier contexto
+// (favicon, imagen social) sin depender de que se resuelvan.
 export function Logo({ size = 28, className = "" }: { size?: number; className?: string }) {
   return (
     <svg viewBox="0 0 64 64" width={size} height={size} className={className} aria-hidden>
@@ -18,25 +18,30 @@ export function Logo({ size = 28, className = "" }: { size?: number; className?:
         </linearGradient>
       </defs>
       <rect width="64" height="64" rx="14" fill="url(#sai-logo-bg)" />
-      {/* Señal/pulso — el dato de partida */}
-      <path
-        d="M7 34h6l4-15 4 30 4-15h5"
+      {/* Anillo de radar/sonar — el barrido técnico, "intelligence" */}
+      <circle
+        cx="32"
+        cy="26"
+        r="17"
         fill="none"
         stroke="#4a72c9"
-        strokeWidth="4.2"
+        strokeWidth="3.2"
         strokeLinecap="round"
-        strokeLinejoin="round"
+        strokeDasharray="80.1 26.7"
+        transform="rotate(-90 32 26)"
       />
-      {/* La ola en la que se convierte */}
+      {/* Punto de señal en el hueco del anillo */}
+      <circle cx="32" cy="9" r="5.2" fill="none" stroke="#f3ad3d" strokeWidth="1.2" opacity="0.4" />
+      <circle cx="32" cy="9" r="2.6" fill="#f3ad3d" />
+      {/* La ola — "sea" */}
       <path
-        d="M30 34c5-11 11-11 16 0s11 11 16 0"
+        d="M6 46c6-7 12-7 18 0s12 7 18 0 12-7 18 0"
         fill="none"
         stroke="#2f9c8c"
         strokeWidth="4.2"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <circle cx="19" cy="19" r="2.6" fill="#f3ad3d" />
     </svg>
   );
 }

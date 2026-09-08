@@ -24,23 +24,27 @@ export async function GET(req: NextRequest) {
         }}
       >
         <svg width={logoSize} height={logoSize} viewBox="0 0 64 64">
-          <path
-            d="M7 34h6l4-15 4 30 4-15h5"
+          <circle
+            cx="32"
+            cy="26"
+            r="17"
             fill="none"
             stroke="#4a72c9"
-            strokeWidth="4.2"
+            strokeWidth="3.2"
             strokeLinecap="round"
-            strokeLinejoin="round"
+            strokeDasharray="80.1 26.7"
+            transform="rotate(-90 32 26)"
           />
+          <circle cx="32" cy="9" r="5.2" fill="none" stroke="#f3ad3d" strokeWidth="1.2" opacity="0.4" />
+          <circle cx="32" cy="9" r="2.6" fill="#f3ad3d" />
           <path
-            d="M30 34c5-11 11-11 16 0s11 11 16 0"
+            d="M6 46c6-7 12-7 18 0s12 7 18 0 12-7 18 0"
             fill="none"
             stroke="#2f9c8c"
             strokeWidth="4.2"
             strokeLinecap="round"
             strokeLinejoin="round"
           />
-          <circle cx="19" cy="19" r="2.6" fill="#f3ad3d" />
         </svg>
       </div>
     ),
