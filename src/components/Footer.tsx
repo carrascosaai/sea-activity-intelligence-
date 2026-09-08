@@ -52,7 +52,16 @@ export function Footer() {
           >
             NOAA CoastWatch
           </a>
-          . Mapa con{" "}
+          . Mareas calculadas con{" "}
+          <a
+            href="https://openwaters.io/tides/database"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-foreground underline decoration-border"
+          >
+            constituyentes armónicos reales
+          </a>{" "}
+          donde hay estación cercana. Mapa con{" "}
           <a href="https://leafletjs.com" target="_blank" rel="noopener noreferrer" className="hover:text-foreground underline decoration-border">
             Leaflet
           </a>

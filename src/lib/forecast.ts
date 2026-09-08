@@ -1,13 +1,13 @@
 import { after } from "next/server";
 import { OpenMeteoMarineProvider } from "./providers/openMeteoMarine";
 import { OpenMeteoWeatherProvider } from "./providers/openMeteoWeather";
-import { NullTideProvider } from "./providers/tide";
+import { HarmonicTideProvider } from "./providers/tide";
 import { readForecastCache, writeForecastCache } from "./cache/forecastCache";
 import type { ConditionSnapshot, Location } from "./types";
 
 const weatherProvider = new OpenMeteoWeatherProvider();
 const marineProvider = new OpenMeteoMarineProvider();
-const tideProvider = new NullTideProvider();
+const tideProvider = new HarmonicTideProvider();
 
 const THUNDERSTORM_CODES = new Set([95, 96, 99]);
 

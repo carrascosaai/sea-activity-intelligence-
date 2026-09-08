@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { getActivity, ACTIVITIES } from "@/lib/activities";
 import { displayName, getLocationBySlug } from "@/lib/locations";
-import { getDailySnapshots } from "@/lib/forecast";
+import { getDailySnapshots, getTideInfo } from "@/lib/forecast";
 import { buildHourlyScores, computeBestWindow, findClosestHourIndex } from "@/lib/scoring/dayScores";
 import { scoreCondition } from "@/lib/scoring/engine";
 import {
@@ -15,7 +15,7 @@ import {
   todayISO,
   tomorrowISO,
 } from "@/lib/time";
-import type { ActivityId, SkillLevel, VisibilityInfo, WhenMode } from "@/lib/types";
+import type { ActivityId, SkillLevel, TideInfo, VisibilityInfo, WhenMode } from "@/lib/types";
 import { BAND_META } from "@/lib/bandLabels";
 import { ScoreBadge, BandPill } from "@/components/ui/ScoreBadge";
 import { ActivityBadge } from "@/components/ui/ActivityBadge";
@@ -114,6 +114,10 @@ export default async function ResultadoPage({
     ? visibilityProvider.getInfo(location.lat, location.lon).catch(() => null)
     : Promise.resolve(null);
 
+  // La marea es otro extra informativo (ver TideInfo/TechnicalDetails): si
+  // falla, nunca debe tumbar la página — solo se oculta esa fila.
+  const tidePromise: Promise<TideInfo | null> = getTideInfo(location, dateISO).catch(() => null);
+
   const showShops = !NO_RENTAL_ACTIVITIES.has(activityId);
   const nearbyShopsRaw = showShops ? shopsNear(location.lat, location.lon, { activityId, radiusKm: 15, limit: 5 }) : [];
 
@@ -127,12 +131,14 @@ export default async function ResultadoPage({
 
   let snapshots;
   let visibility: VisibilityInfo | null;
+  let tide: TideInfo | null;
   let shopRatings: Record<string, { avg: number; count: number }>;
   let communityReports: CommunityReportView[];
   try {
-    [snapshots, visibility, shopRatings, communityReports] = await Promise.all([
+    [snapshots, visibility, tide, shopRatings, communityReports] = await Promise.all([
       getDailySnapshots(location, dateISO),
       visibilityPromise,
+      tidePromise,
       getShopRatingSummaries(nearbyShopsRaw.map((s) => s.slug)),
       getCommunityReports(location.slug),
     ]);
@@ -347,7 +353,7 @@ export default async function ResultadoPage({
       </div>
 
       <div className="mt-6">
-        <TechnicalDetails snapshot={headline.snapshot} />
+        <TechnicalDetails snapshot={headline.snapshot} tide={tide} />
       </div>
 
       <div className="mt-6">

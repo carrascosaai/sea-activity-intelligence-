@@ -215,6 +215,47 @@ Cataluña o Andalucía mezclan provincias de costa y de interior (Álava, Lleida
 Córdoba). Siguen en `beaches.json` (el archivo generado no se toca) pero nunca llegan
 a un usuario de esta web.
 
+## Mareas (sep. 2026)
+
+Durante mucho tiempo la web dijo honestamente "no disponible — sin proveedor abierto
+para España", porque Open-Meteo no tiene mareas y tanto Puertos del Estado como AEMET
+solo ofrecen acceso programático vía OPeNDAP/NetCDF (mismo problema de encaje que
+Copernicus Marine, ver más abajo) o una API interna no documentada de su app de
+consulta. Nada de eso encajaba sin fricción.
+
+**Lo que sí encaja, y es real:** la marea NO se puede calcular con astronomía genérica
+(posición Sol/Luna sin más) — la misma fuerza astronómica da mareas de 4 m en Cádiz y
+casi nulas en el Mediterráneo, hace falta el dato empírico de cada punto de la costa
+(constituyentes armónicos: amplitud y fase por componente, medidos con años de datos
+reales). [`@neaps/tide-database`](https://openwaters.io/tides/database) (MIT, npm)
+publica esos constituyentes reales de miles de estaciones mundiales — TICON-4, basada
+en registros históricos GESLA-4 — incluidas 86 en España. Combinado con
+[`@neaps/tide-predictor`](https://github.com/openwatersio/neaps) (MIT, sin
+dependencias) se calcula la predicción real sin ninguna llamada de red — pura
+astronomía + los constituyentes de la estación, igual que hace cualquier software de
+mareas profesional.
+
+**Solo licencia comercial, sin excepción:** de esas 86 estaciones españolas, la mitad
+son `cc-by-nc-4.0` (no comercial) — legalmente no se pueden usar en un producto real,
+por gratis que sea hoy. `scripts/generate-tide-stations.mjs` filtra en build-time a
+las 20 con licencia `cc-by-4.0` (uso comercial explícitamente permitido) y las vuelca
+a `src/data/tideStations.json` (~120 KB) — el paquete de 56 MB de la base de datos es
+`devDependency`, nunca se despliega (mismo patrón que `generate-beaches.mjs`).
+
+**Cobertura real, no fingida:** con solo 20 estaciones frente a ~3.500 playas,
+la mayoría se queda sin dato — `lib/providers/tide.ts` busca la estación real más
+cercana y, si está a más de 70 km, dice honestamente "no disponible" en vez de dar una
+lectura de una zona que ya no es representativa (la amplitud de marea cambia bastante
+en tramos largos de costa). El límite de 70 km es conservador: **verificado en
+directo** comparando con la predicción oficial real de Puertos del Estado para
+Bilbao (capturada en vivo desde su propia app, ver sección de arriba) — la estación de
+Santander, a ~100 km, acertó la hora de las 4 pleamares/bajamares del día con un
+margen de 1 a 5 minutos, y las alturas a pocos centímetros.
+
+No entra en el score 0-100 (como la claridad del agua): se muestra como dato técnico
+adicional en cada resultado, con la estación real usada y la distancia a la playa
+siempre visibles, para que quien lo lea sepa exactamente de dónde sale el número.
+
 ## Claridad del agua (buceo, snorkel, apnea)
 
 No existe una API pública real de "visibilidad de buceo" en España. Investigado y

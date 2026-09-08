@@ -74,10 +74,21 @@ export interface MarineHourPoint {
   windWaveHeightM: number | null;
 }
 
-export interface TideInfo {
-  available: false;
-  reason: string;
+export interface TideEvent {
+  type: "pleamar" | "bajamar";
+  time: string; // ISO local (Europe/Madrid)
+  heightM: number;
 }
+
+export type TideInfo =
+  | {
+      available: true;
+      events: TideEvent[]; // pleamares/bajamares de hoy, en orden cronológico
+      stationName: string;
+      distanceKm: number; // a la estación real más cercana con constituyentes armónicos
+      source: { name: string; url: string };
+    }
+  | { available: false; reason: string };
 
 export type WaterClarityLabel = "Excepcional" | "Muy buena" | "Buena" | "Moderada" | "Reducida" | "Baja";
 
