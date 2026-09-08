@@ -78,12 +78,40 @@ export function scoreCondition(
   }
   score -= wavePenalty;
 
-  // --- Periodo ---
-  const periodPenalty = penaltyLinearInverse(snapshot.wavePeriodS, rules.period.goodS, rules.period.badS, rules.period.maxPenalty);
-  score -= periodPenalty;
-  if (rules.period.maxPenalty > 0 && periodPenalty >= rules.period.maxPenalty * 0.6) {
-    reasons.push({ type: "negative", text: `Periodo corto (${snapshot.wavePeriodS.toFixed(0)} s), puede ser más incómodo` });
+  // --- Periodo --- (ver ruleTypes.ts: el sentido de "mejor" cambia según el deporte)
+  let periodPenalty: number;
+  if (rules.period.kind === "shorter-is-worse") {
+    periodPenalty = penaltyLinearInverse(snapshot.wavePeriodS, rules.period.goodS, rules.period.badS, rules.period.maxPenalty);
+    if (rules.period.maxPenalty > 0 && periodPenalty >= rules.period.maxPenalty * 0.6) {
+      reasons.push({ type: "negative", text: `Periodo corto (${snapshot.wavePeriodS.toFixed(0)} s): oleaje de viento, más incómodo/inestable` });
+    }
+  } else if (rules.period.kind === "longer-is-worse") {
+    periodPenalty = penaltyLinear(snapshot.wavePeriodS, rules.period.goodS, rules.period.badS, rules.period.maxPenalty);
+    if (rules.period.maxPenalty > 0 && periodPenalty >= rules.period.maxPenalty * 0.6) {
+      reasons.push({
+        type: "negative",
+        text: `Periodo largo (${snapshot.wavePeriodS.toFixed(0)} s): más energía en la rotura, riesgo de corrientes de retorno`,
+      });
+    }
+  } else {
+    periodPenalty = penaltyRange(
+      snapshot.wavePeriodS,
+      rules.period.idealMinS,
+      rules.period.idealMaxS,
+      rules.period.hardMinS,
+      rules.period.hardMaxS,
+      rules.period.maxPenalty
+    );
+    if (periodPenalty <= 2) {
+      reasons.push({ type: "positive", text: "Periodo de ola con buena calidad (mar de fondo organizado)" });
+    } else if (snapshot.wavePeriodS < rules.period.idealMinS) {
+      reasons.push({
+        type: "negative",
+        text: `Periodo corto (${snapshot.wavePeriodS.toFixed(0)} s): oleaje de viento, olas desorganizadas y con poca fuerza`,
+      });
+    }
   }
+  score -= periodPenalty;
 
   // --- Temperatura del agua (secundario) ---
   const tempPenalty = penaltyLinearInverse(

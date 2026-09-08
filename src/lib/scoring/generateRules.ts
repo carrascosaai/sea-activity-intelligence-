@@ -1,5 +1,5 @@
 import type { SkillLevel } from "../types";
-import type { ActivityLevelRules, ActivityProfile, ComfortRule, WaveRule, WindRule } from "./ruleTypes";
+import type { ActivityLevelRules, ActivityProfile, ComfortRule, PeriodRule, WaveRule, WindRule } from "./ruleTypes";
 
 /**
  * Factores de escalado por nivel, aplicados sobre el perfil base (principiante).
@@ -55,6 +55,42 @@ function scaleWave(wave: WaveRule, f: { thresholdMult: number; penaltyMult: numb
   };
 }
 
+/**
+ * Igual que scaleWind/scaleWave: el nivel avanzado tolera condiciones más
+ * exigentes antes de que el periodo penalice, y cuando penaliza, lo nota
+ * menos (penaltyMult). Qué umbral se mueve depende del sentido de la regla
+ * (ver ruleTypes.ts) — para "longer-is-worse" el umbral "malo" está arriba,
+ * igual que en el viento lineal; para "shorter-is-worse" está abajo, así
+ * que escalar por el mismo factor multiplicativo lo acerca a 0 en vez de
+ * alejarlo — hace falta invertir la dirección.
+ */
+function scalePeriod(period: PeriodRule, f: { thresholdMult: number; penaltyMult: number }): PeriodRule {
+  if (period.kind === "shorter-is-worse") {
+    return {
+      kind: "shorter-is-worse",
+      goodS: period.goodS / f.thresholdMult,
+      badS: period.badS / f.thresholdMult,
+      maxPenalty: period.maxPenalty * f.penaltyMult,
+    };
+  }
+  if (period.kind === "longer-is-worse") {
+    return {
+      kind: "longer-is-worse",
+      goodS: period.goodS * f.thresholdMult,
+      badS: period.badS * f.thresholdMult,
+      maxPenalty: period.maxPenalty * f.penaltyMult,
+    };
+  }
+  return {
+    kind: "range",
+    idealMinS: period.idealMinS,
+    idealMaxS: period.idealMaxS * f.thresholdMult,
+    hardMinS: period.hardMinS,
+    hardMaxS: period.hardMaxS * f.thresholdMult,
+    maxPenalty: period.maxPenalty * f.penaltyMult,
+  };
+}
+
 function scaleComfort(profile: ActivityProfile, f: { thresholdMult: number; penaltyMult: number }): ComfortRule {
   return {
     waterTempGoodC: 20,
@@ -74,7 +110,7 @@ export function buildActivityRules(profile: ActivityProfile): Record<SkillLevel,
     result[level] = {
       wind: scaleWind(profile.wind, f),
       wave: scaleWave(profile.wave, f),
-      period: { goodS: profile.period.goodS, badS: profile.period.badS, maxPenalty: profile.period.maxPenalty * f.penaltyMult },
+      period: scalePeriod(profile.period, f),
       comfort: scaleComfort(profile, f),
     };
   }
