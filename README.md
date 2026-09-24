@@ -492,3 +492,23 @@ cobra nada — ver `VALIDATION.md`.
 
 El producto nunca afirma que una actividad "es segura". Toda pantalla de resultado
 incluye un aviso explícito (`src/components/SafetyNotice.tsx`).
+
+## Cámara cercana a cada playa (sep. 2026)
+
+Cada resultado enseña una imagen reciente de una webcam real para contrastar los datos con lo que se ve.
+Tres niveles, en este orden (`src/app/resultado/page.tsx`):
+
+1. **Cámaras verificadas a mano** (`src/lib/webcams.ts`): un puñado de playas con retransmisión 24/7 de YouTube.
+2. **Windy Webcams API** (`src/lib/providers/windyWebcams.ts`, plan gratuito): la webcam de playa más cercana.
+   Solo se acepta si Windy la clasifica como `beach` y está a ≤ 1,5 km, o a ≤ 5 km si su título nombra la playa
+   (las playas largas, como Los Lances, tienen el "punto" lejos de la cámara). Siempre se muestra la distancia y
+   la frescura de la imagen; nunca se hace pasar por la cámara exacta de la playa.
+3. **Enlace de búsqueda** si no hay nada fiable — mejor eso que enseñar la cámara de otra playa.
+
+Requisitos del plan gratuito de Windy que se cumplen: atribución "Webcams provided by windy.com" y enlace de la
+imagen a su página; las URLs de imagen caducan a los 10 min, así que se piden desde el servidor (caché de 4 min) y
+no se guardan; una sola petición por página. **No se analizan las imágenes automáticamente** (sus términos no lo
+aclaran); las cámaras sirven para contrastar visualmente, no para calcular el score.
+
+Variable de entorno: `WINDY_WEBCAMS_API_KEY` (clave gratuita en https://api.windy.com/keys, servicio "Webcams API";
+secreto de servidor, sin prefijo `NEXT_PUBLIC_`). Sin ella la app funciona igual y solo se ven los niveles 1 y 3.

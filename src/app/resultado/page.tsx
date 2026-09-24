@@ -52,6 +52,8 @@ import { CommunityReports, type CommunityReportView } from "@/components/Communi
 import { getWebcam } from "@/lib/webcams";
 import { WebcamCard } from "@/components/WebcamCard";
 import { WebcamSearchLink } from "@/components/WebcamSearchLink";
+import { WindyWebcamCard } from "@/components/WindyWebcamCard";
+import { getWindyWebcam } from "@/lib/providers/windyWebcams";
 import { BOARD_GUIDES } from "@/lib/boardGuides";
 import { BoardGuideCard } from "@/components/BoardGuideCard";
 
@@ -147,6 +149,11 @@ export default async function ResultadoPage({
     })
   );
 
+  // Webcam cercana (Windy): solo se consulta si la playa no tiene ya una
+  // cámara verificada a mano. Nunca rechaza (devuelve null ante cualquier
+  // fallo) y arranca aquí para correr en paralelo con el resto de datos.
+  const windyWebcamPromise = getWebcam(location.slug) ? Promise.resolve(null) : getWindyWebcam(location.lat, location.lon, location.name);
+
   const showShops = !NO_RENTAL_ACTIVITIES.has(activityId);
   const nearbyShopsRaw = showShops ? shopsNear(location.lat, location.lon, { activityId, radiusKm: 15, limit: 5 }) : [];
 
@@ -206,6 +213,7 @@ export default async function ResultadoPage({
   }
 
   const webcam = getWebcam(location.slug);
+  const windyWebcam = await windyWebcamPromise;
   const boardGuide = BOARD_GUIDES[activityId] ?? null;
 
   const nearbyShops: NearbyShopView[] = nearbyShopsRaw.map((s) => ({
@@ -323,7 +331,13 @@ export default async function ResultadoPage({
       </div>
 
       <div className="mt-6">
-        {webcam ? <WebcamCard webcam={webcam} /> : <WebcamSearchLink locationLabel={displayName(location)} />}
+        {webcam ? (
+          <WebcamCard webcam={webcam} />
+        ) : windyWebcam ? (
+          <WindyWebcamCard cam={windyWebcam} />
+        ) : (
+          <WebcamSearchLink locationLabel={displayName(location)} />
+        )}
       </div>
 
       {showClarity && visibility && (

@@ -78,6 +78,11 @@ export default function ComoFuncionaPage() {
             note="Turbidez del agua vista desde satélite, con 1-2 semanas de retraso — un proxy regional, no una medición del punto exacto de inmersión. Por eso no resta puntos del score."
           />
           <SourceRow
+            label="Cámaras de playa"
+            source="Windy Webcams · YouTube"
+            note="Para comprobar el dato con tus propios ojos: la imagen reciente de la webcam de playa más cercana (Windy) o, en unas pocas playas, una cámara verificada a mano. Solo se muestra si está cerca o nombra la playa, y siempre indica a qué distancia está. No son cámaras nuestras ni las analizamos automáticamente: sirven para contrastar, no para calcular el score."
+          />
+          <SourceRow
             label="Las ~3.500 playas"
             source="OpenStreetMap"
             note="Datos geográficos abiertos y editables por cualquiera — igual que Wikipedia, pero de mapas."
