@@ -59,8 +59,18 @@
    de Tailwind sin importar la especificidad, y así "position: relative" de
    abajo bloqueaba silenciosamente cualquier "fixed" en un hijo de body. */
 @layer base {
+  /* Color sólido en <html> (que además es h-full = alto de pantalla). Sin
+     esto, el degradado del body se propaga al lienzo y se REPITE cada vez
+     que termina el alto de la pantalla: al hacer scroll en portátil/iPad
+     se veía un salto de color a media página. */
+  html {
+    background-color: var(--background);
+  }
+
   body {
-    background: radial-gradient(circle at 15% 0%, #142420 0%, var(--background) 55%);
+    /* Un solo degradado del tamaño de la pantalla, sin repetir; su color
+       final es exactamente el fondo de <html>, así que se funde sin costura. */
+    background: radial-gradient(circle at 15% 0%, #142420 0%, var(--background) 55%) top left / 100% 100svh no-repeat;
     color: var(--foreground);
     font-family: var(--font-system);
     min-height: 100svh;

@@ -20,7 +20,7 @@ export function WebcamSearchLink({ locationLabel }: { locationLabel: string }) {
       <span className="text-sm">
         <span className="block font-medium">Buscar una cámara en directo de esta zona</span>
         <span className="block text-xs text-muted mt-0.5">
-          No tenemos una cámara verificada para esta playa — esto busca en Google.
+          No hay ninguna cámara fiable de esta playa: solo mostramos cámaras que sabemos que son de aquí. Esto busca una en Google.
         </span>
       </span>
     </a>
