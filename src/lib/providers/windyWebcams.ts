@@ -13,22 +13,33 @@
  *
  * Mismo criterio que las fotos de playa (BeachPhoto) y las webcams
  * verificadas a mano (lib/webcams.ts): mejor NO mostrar nada que mostrar la
- * cámara de otra playa. Solo se acepta una cámara a menos de MAX_DISTANCE_KM
- * y siempre se enseña a qué distancia está, no se hace pasar por "la" cámara
- * de la playa. Sin clave (WINDY_WEBCAMS_API_KEY) o ante cualquier fallo,
- * devuelve null y la página cae al enlace de búsqueda de siempre.
+ * cámara de otra playa haciéndola pasar por la de esta. Dos niveles:
+ *  - "near": cámara de esta playa o pegada a ella (playa ≤1,5 km, costa ≤1 km,
+ *    o hasta 5 km si el título de la cámara nombra la playa).
+ *  - "zone": la más cercana dentro de 3 km, que NO es esta playa. Se etiqueta
+ *    así en la tarjeta ("No es esta playa") y siempre con su distancia.
+ * Sin clave (WINDY_WEBCAMS_API_KEY) o ante cualquier fallo, devuelve null y la
+ * página cae al enlace de búsqueda de siempre.
  */
 
 const API = "https://api.windy.com/webcams/api/v3/webcams";
 const SEARCH_RADIUS_KM = 5;
 /** Cámara de playa "cercana": vale sin más comprobación. */
 const MAX_DISTANCE_KM = 1.5;
+/** Las de "costa" (paseos marítimos, faros, calas...) son menos específicas de
+ *  playa que las de categoría "beach", así que se les exige estar más cerca. */
+const MAX_DISTANCE_COAST_KM = 1.0;
+/** Nivel "de la zona": no es esta playa, pero enseña el mar de los alrededores.
+ *  Siempre se etiqueta así y con su distancia. */
+const MAX_DISTANCE_ZONE_KM = 3;
 /** Playas largas (Los Lances: ~7 km): el punto central de la playa puede estar
  *  lejos de la cámara. Más allá de MAX_DISTANCE_KM solo se acepta si el nombre
  *  de la cámara contiene el nombre propio de la playa. */
 const MAX_DISTANCE_NAMED_KM = 5;
 
 export interface WindyWebcam {
+  /** "near": cámara de esta playa o pegada a ella. "zone": cámara de los alrededores. */
+  kind: "near" | "zone";
   id: number;
   title: string;
   imageUrl: string;
@@ -95,24 +106,32 @@ export async function getWindyWebcam(lat: number, lon: number, beachName: string
     if (!res.ok) return null;
     const json = (await res.json()) as { webcams?: ApiWebcam[] };
 
-    const candidates = (json.webcams ?? [])
+    const scored = (json.webcams ?? [])
       .filter((w) => w.status === "active" && w.images?.current?.preview && w.location && w.urls?.detail)
       .map((w) => ({
         w,
         d: haversineKm(lat, lon, w.location!.latitude, w.location!.longitude),
         isBeach: (w.categories ?? []).some((c) => c.id === "beach"),
+        isCoast: (w.categories ?? []).some((c) => c.id === "coast"),
         named: titleMentionsBeach(w.title ?? "", beachName),
       }))
-      // Solo cámaras que Windy clasifica como de playa, y cercanas — o más
-      // lejanas si el nombre de la cámara nombra esta playa.
-      .filter((c) => c.isBeach && (c.d <= MAX_DISTANCE_KM || (c.named && c.d <= MAX_DISTANCE_NAMED_KM)))
-      // Primero las que nombran la playa, luego las más cercanas.
-      .sort((a, b) => Number(b.named) - Number(a.named) || a.d - b.d);
+      .filter((c) => c.isBeach || c.isCoast);
 
-    const best = candidates[0];
+    // Nivel "cercana": de categoría playa a ≤1,5 km, de costa a ≤1 km, o más
+    // lejos si el nombre de la cámara nombra esta playa. Primero las que la
+    // nombran, luego las más cercanas.
+    const near = scored
+      .filter((c) => (c.isBeach && c.d <= MAX_DISTANCE_KM) || (c.isCoast && c.d <= MAX_DISTANCE_COAST_KM) || (c.named && c.d <= MAX_DISTANCE_NAMED_KM))
+      .sort((a, b) => Number(b.named) - Number(a.named) || a.d - b.d);
+    // Nivel "de la zona": la más cercana dentro de 3 km si no hay ninguna anterior.
+    const zone = scored.filter((c) => c.d <= MAX_DISTANCE_ZONE_KM).sort((a, b) => a.d - b.d);
+
+    const best = near[0] ?? zone[0];
     if (!best) return null;
+    const kind: "near" | "zone" = near[0] ? "near" : "zone";
     const size = best.w.images?.sizes?.preview ?? { width: 400, height: 224 };
     return {
+      kind,
       id: best.w.webcamId,
       title: (best.w.title ?? "Webcam").trim(),
       imageUrl: best.w.images!.current!.preview!,

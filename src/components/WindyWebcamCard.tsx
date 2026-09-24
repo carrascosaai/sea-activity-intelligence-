@@ -19,12 +19,14 @@ function freshnessLabel(iso: string | null): { text: string; stale: boolean } | 
  */
 export function WindyWebcamCard({ cam }: { cam: WindyWebcam }) {
   const fresh = freshnessLabel(cam.lastUpdatedOn);
-  const dist = cam.distanceKm < 0.1 ? "junto a la playa" : `a ${cam.distanceKm.toString().replace(".", ",")} km de la playa`;
+  const isZone = cam.kind === "zone";
+  const km = cam.distanceKm.toString().replace(".", ",");
+  const dist = cam.distanceKm < 0.1 ? "junto a la playa" : `a ${km} km de la playa`;
 
   return (
     <div className="rounded-xl bg-surface border border-border p-4">
       <div className="flex items-center justify-between mb-2">
-        <h3 className="text-sm font-semibold text-muted uppercase tracking-wide">Cámara cercana</h3>
+        <h3 className="text-sm font-semibold text-muted uppercase tracking-wide">{isZone ? "Cámara de la zona" : "Cámara cercana"}</h3>
         <span className="text-[10px] text-muted uppercase tracking-wide">Imagen reciente</span>
       </div>
 
@@ -49,9 +51,18 @@ export function WindyWebcamCard({ cam }: { cam: WindyWebcam }) {
       </a>
 
       <p className="text-xs text-muted mt-2.5 leading-relaxed">
-        <span className="text-foreground/90">{cam.title}</span> — {dist}. Compara lo que ves con los datos de arriba: es la
-        forma más honesta de comprobar si se ajustan a la realidad ahora mismo. No es una cámara nuestra y puede no
-        enfocar exactamente esta playa.
+        <span className="text-foreground/90">{cam.title}</span> — {dist}.{" "}
+        {isZone ? (
+          <>
+            <strong className="text-foreground/90 font-semibold">No es esta playa</strong>: es la cámara más cercana que
+            tenemos y enseña el mar de la zona, útil para hacerte una idea del oleaje y el viento pero no para ver esta arena.
+          </>
+        ) : (
+          <>
+            Compara lo que ves con los datos de arriba: es la forma más honesta de comprobar si se ajustan a la realidad
+            ahora mismo. No es una cámara nuestra y puede no enfocar exactamente esta playa.
+          </>
+        )}
       </p>
       <p className="text-[10px] text-muted mt-1.5">
         <a href="https://www.windy.com/" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">

@@ -80,7 +80,7 @@ export default function ComoFuncionaPage() {
           <SourceRow
             label="Cámaras de playa"
             source="Windy Webcams · YouTube"
-            note="Para comprobar el dato con tus propios ojos: la imagen reciente de la webcam de playa más cercana (Windy) o, en unas pocas playas, una cámara verificada a mano. Solo se muestra si está cerca o nombra la playa, y siempre indica a qué distancia está. No son cámaras nuestras ni las analizamos automáticamente: sirven para contrastar, no para calcular el score."
+            note="Para comprobar el dato con tus propios ojos: la imagen reciente de la webcam de playa más cercana (Windy) o, en unas pocas playas, una cámara verificada a mano. Se muestra si está cerca o nombra la playa; si solo hay una de los alrededores, se etiqueta como «la zona» y avisa de que no es esa playa. Siempre indica la distancia. No son cámaras nuestras ni las analizamos automáticamente: sirven para contrastar, no para calcular el score."
           />
           <SourceRow
             label="Las ~3.500 playas"

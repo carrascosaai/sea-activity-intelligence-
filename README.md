@@ -496,19 +496,32 @@ incluye un aviso explícito (`src/components/SafetyNotice.tsx`).
 ## Cámara cercana a cada playa (sep. 2026)
 
 Cada resultado enseña una imagen reciente de una webcam real para contrastar los datos con lo que se ve.
-Tres niveles, en este orden (`src/app/resultado/page.tsx`):
+Niveles, del más al menos fiable (`src/app/resultado/page.tsx`):
 
-1. **Cámaras verificadas a mano** (`src/lib/webcams.ts`): un puñado de playas con retransmisión 24/7 de YouTube.
-2. **Windy Webcams API** (`src/lib/providers/windyWebcams.ts`, plan gratuito): la webcam de playa más cercana.
-   Solo se acepta si Windy la clasifica como `beach` y está a ≤ 1,5 km, o a ≤ 5 km si su título nombra la playa
-   (las playas largas, como Los Lances, tienen el "punto" lejos de la cámara). Siempre se muestra la distancia y
-   la frescura de la imagen; nunca se hace pasar por la cámara exacta de la playa.
-3. **Enlace de búsqueda** si no hay nada fiable — mejor eso que enseñar la cámara de otra playa.
+1. **Cámaras de YouTube verificadas a mano** (`src/lib/webcams.ts`): 8 playas. Comprobadas con
+   `npm run verify:webcams` (en directo + inserción permitida). **Auditoría sep. 2026:** de las 7 originales,
+   4 estaban rotas sin que nadie lo detectara (directo caído, vídeo borrado, inserción desactivada por el autor);
+   se retiraron. Un directo puede morir en cualquier momento: repetir el script de vez en cuando.
+2. **Windy Webcams API, "cercana"** (`src/lib/providers/windyWebcams.ts`, plan gratuito): cámara que Windy
+   clasifica como `beach` a ≤ 1,5 km, como `coast` a ≤ 1 km, o hasta 5 km si su título nombra la playa (playas
+   largas como Los Lances tienen el punto de referencia lejos de la cámara).
+3. **Windy, "de la zona"**: la más cercana dentro de 3 km, etiquetada explícitamente *"No es esta playa"* y con su
+   distancia. Sirve para hacerse una idea del mar de la zona, no para ver esta arena.
+4. **Enlace de búsqueda** si no hay nada — mejor eso que enseñar la cámara de otra playa como si fuera esta.
+
+**Cobertura real (3.630 playas):** 7,4 % con cámara de esa playa (niveles 1-2), 16,6 % con alguna imagen (incluye
+la de la zona), 13 de las 22 playas marcadas como populares. Windy solo tiene ~204 cámaras útiles en toda España
+(114 de playa, 179 de costa, 32 de puerto): ese es el techo de esa fuente, no un fallo de la integración.
 
 Requisitos del plan gratuito de Windy que se cumplen: atribución "Webcams provided by windy.com" y enlace de la
 imagen a su página; las URLs de imagen caducan a los 10 min, así que se piden desde el servidor (caché de 4 min) y
 no se guardan; una sola petición por página. **No se analizan las imágenes automáticamente** (sus términos no lo
 aclaran); las cámaras sirven para contrastar visualmente, no para calcular el score.
 
+**Otras fuentes evaluadas y descartadas:** Skyline Webcams (sus términos prohíben copiar/insertar sus imágenes; solo
+el dueño de la cámara puede insertarla), Surfline (de pago), Hispacams (55+ cámaras de playa, pero no publica cómo
+insertarlas y parece de pago — habría que escribirles a info@hispacams.com). Las cámaras de YouTube se buscan a
+mano: de ~45 candidatas solo 12 estaban en directo y eran insertables, y 5 correspondían a playas de nuestra base.
+
 Variable de entorno: `WINDY_WEBCAMS_API_KEY` (clave gratuita en https://api.windy.com/keys, servicio "Webcams API";
-secreto de servidor, sin prefijo `NEXT_PUBLIC_`). Sin ella la app funciona igual y solo se ven los niveles 1 y 3.
+secreto de servidor, sin prefijo `NEXT_PUBLIC_`). Sin ella la app funciona igual y solo se ven los niveles 1 y 4.
